@@ -2,3 +2,5 @@ google-genai
 python-dotenv
 ipykernel
 jupyter
+jupyter_bokeh
+panel
