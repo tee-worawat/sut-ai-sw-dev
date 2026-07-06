@@ -1,0 +1,7 @@
+pydantic[email]
+python-dotenv
+google-genai
+pydantic-ai
+nest-asyncio
+ipykernel
+jupyter
