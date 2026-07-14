@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- Week 1: Prompt Engineering Fundamentals - 20 Multiple Choice Questions (EN/TH) -->
+
+  <question type="multichoice">
+    <name>
+      <text>Delimiters purpose</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What is the primary purpose of using delimiters (such as triple backticks, triple quotes, or XML tags) in a prompt?</p><p lang="th"><strong>ไทย:</strong> จุดประสงค์หลักของการใช้ตัวคั่น (delimiters) เช่น triple backticks, triple quotes หรือ XML tags ใน prompt คืออะไร?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Delimiters create clear boundaries between your instructions and the content the model should process, reducing confusion and irrelevant responses.</p><p lang="th"><strong>ไทย:</strong> ตัวคั่นช่วยสร้างขอบเขตที่ชัดเจนระหว่างคำสั่งของคุณกับเนื้อหาที่โมเดลควรประมวลผล ลดความสับสนและคำตอบที่ไม่เกี่ยวข้อง</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[To make prompts as short as possible<br/><span lang="th">ไทย: เพื่อทำให้ prompt สั้นที่สุดเท่าที่จะเป็นไปได้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[To clearly separate instructions from the content the model should focus on<br/><span lang="th">ไทย: เพื่อแยกคำสั่งออกจากเนื้อหาที่โมเดลควรมุ่งเน้นอย่างชัดเจน</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[To reduce API latency<br/><span lang="th">ไทย: เพื่อลดความหน่วงของ API</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[To enable multi-turn chat conversations<br/><span lang="th">ไทย: เพื่อเปิดใช้งานการสนทนาแบบหลายรอบ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Clear vs short prompts</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>According to effective prompting principles, how should "clear" instructions relate to prompt length?</p><p lang="th"><strong>ไทย:</strong> ตามหลักการ prompting ที่มีประสิทธิภาพ คำสั่งที่ "ชัดเจน" ควรมีความสัมพันธ์กับความยาวของ prompt อย่างไร?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Clarity and specificity matter more than brevity. Longer prompts often provide more context and lead to more relevant outputs.</p><p lang="th"><strong>ไทย:</strong> ความชัดเจนและความเฉพาะเจาะจงสำคัญกว่าความกระชับ prompt ที่ยาวกว่ามักให้บริบทมากขึ้นและนำไปสู่ผลลัพธ์ที่เกี่ยวข้องมากขึ้น</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[A clear prompt must always be as short as possible<br/><span lang="th">ไทย: prompt ที่ชัดเจนต้องสั้นที่สุดเสมอ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[A clear prompt should be specific and detailed, which may require a longer prompt<br/><span lang="th">ไทย: prompt ที่ชัดเจนควรเฉพาะเจาะจงและละเอียด ซึ่งอาจต้องใช้ prompt ที่ยาวขึ้น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Length does not affect output quality<br/><span lang="th">ไทย: ความยาวไม่มีผลต่อคุณภาพของผลลัพธ์</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Only bullet-point prompts can be clear<br/><span lang="th">ไทย: เฉพาะ prompt แบบ bullet point เท่านั้นที่จะชัดเจนได้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Structured output</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Why is asking for structured output (such as JSON or HTML) a useful prompting tactic?</p><p lang="th"><strong>ไทย:</strong> ทำไมการขอผลลัพธ์แบบมีโครงสร้าง (structured output) เช่น JSON หรือ HTML จึงเป็นกลยุทธ์ prompting ที่มีประโยชน์?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Structured formats make outputs predictable and easy to parse programmatically for downstream applications.</p><p lang="th"><strong>ไทย:</strong> รูปแบบที่มีโครงสร้างทำให้ผลลัพธ์คาดเดาได้และง่ายต่อการแยกวิเคราะห์ด้วยโปรแกรมสำหรับการใช้งานต่อไป</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It forces the model to use fewer tokens<br/><span lang="th">ไทย: บังคับให้โมเดลใช้ token น้อยลง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[It produces output that is easier to parse and use in software applications<br/><span lang="th">ไทย: สร้างผลลัพธ์ที่ง่ายต่อการแยกวิเคราะห์และใช้งานในแอปพลิเคชันซอฟต์แวร์</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It eliminates the need for delimiters<br/><span lang="th">ไทย: ทำให้ไม่จำเป็นต้องใช้ตัวคั่น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It prevents the model from following instructions<br/><span lang="th">ไทย: ป้องกันไม่ให้โมเดลทำตามคำสั่ง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Few-shot prompting</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What is few-shot prompting?</p><p lang="th"><strong>ไทย:</strong> few-shot prompting คืออะไร?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Few-shot prompting provides example input-output pairs in the prompt so the model can imitate the desired style or format.</p><p lang="th"><strong>ไทย:</strong> few-shot prompting ให้ตัวอย่างคู่ input-output ใน prompt เพื่อให้โมเดลเลียนแบบสไตล์หรือรูปแบบที่ต้องการ</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Running the model with a minimal number of API calls<br/><span lang="th">ไทย: รันโมเดลด้วยจำนวนการเรียก API น้อยที่สุด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Providing example demonstrations in the prompt to show the desired response pattern<br/><span lang="th">ไทย: ให้ตัวอย่างการสาธิตใน prompt เพื่อแสดงรูปแบบคำตอบที่ต้องการ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Limiting the model's output to fewer than 50 words<br/><span lang="th">ไทย: จำกัดผลลัพธ์ของโมเดลให้น้อยกว่า 50 คำ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Using only system messages without user input<br/><span lang="th">ไทย: ใช้เฉพาะ system message โดยไม่มี input จากผู้ใช้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Give model time to think</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What does the prompting principle "Give the model time to think" mean in practice?</p><p lang="th"><strong>ไทย:</strong> หลักการ prompting "ให้โมเดลมีเวลาคิด" (Give the model time to think) หมายความว่าอย่างไรในทางปฏิบัติ?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>This principle encourages breaking complex tasks into steps or asking the model to reason through intermediate work before giving a final answer.</p><p lang="th"><strong>ไทย:</strong> หลักการนี้สนับสนุนการแบ่งงานที่ซับซ้อนเป็นขั้นตอน หรือให้โมเดลใช้เหตุผลผ่านงานขั้นกลางก่อนให้คำตอบสุดท้าย</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Adding artificial delays between API requests<br/><span lang="th">ไทย: เพิ่มการหน่วงเวลาระหว่างการเรียก API</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Instructing the model to work through intermediate steps or its own reasoning before producing a final conclusion<br/><span lang="th">ไทย: สั่งให้โมเดลทำงานผ่านขั้นตอนกลางหรือใช้เหตุผลของตนเองก่อนสรุปคำตอบสุดท้าย</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Using the slowest available model<br/><span lang="th">ไทย: ใช้โมเดลที่ช้าที่สุดที่มี</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Splitting every task across multiple separate chat sessions<br/><span lang="th">ไทย: แบ่งทุกงานออกเป็นหลาย session การสนทนาแยกกัน</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Work out solution first</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>When asking an LLM to judge whether a solution to a problem is correct, why is it helpful to instruct the model to solve the problem itself first?</p><p lang="th"><strong>ไทย:</strong> เมื่อขอให้ LLM ตัดสินว่าวิธีแก้ปัญหาถูกต้องหรือไม่ ทำไมจึงมีประโยชน์ที่จะสั่งให้โมเดลแก้ปัญหาด้วยตนเองก่อน?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Without working through the problem independently, the model may agree with an incorrect solution. Computing its own answer first improves evaluation accuracy.</p><p lang="th"><strong>ไทย:</strong> หากไม่แก้ปัญหาด้วยตนเองก่อน โมเดลอาจยอมรับวิธีแก้ที่ผิด การคำนวณคำตอบของตนเองก่อนจะช่วยเพิ่มความแม่นยำในการประเมิน</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Models cannot compare two text answers unless they solve the problem first<br/><span lang="th">ไทย: โมเดลไม่สามารถเปรียบเทียบคำตอบสองข้อความได้เว้นแต่จะแก้ปัญหาก่อน</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Without its own solution, the model may incorrectly accept a wrong answer<br/><span lang="th">ไทย: หากไม่มีวิธีแก้ของตนเอง โมเดลอาจยอมรับคำตอบที่ผิดโดยไม่ถูกต้อง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It is required by all LLM APIs<br/><span lang="th">ไทย: เป็นข้อกำหนดของ LLM API ทุกตัว</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It reduces the number of tokens in the final response<br/><span lang="th">ไทย: ลดจำนวน token ในคำตอบสุดท้าย</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Hallucinations</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What is a "hallucination" when using a large language model?</p><p lang="th"><strong>ไทย:</strong> "hallucination" คืออะไรเมื่อใช้ large language model?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Hallucinations occur when a model generates plausible-sounding but false or unverified information, such as inventing product details.</p><p lang="th"><strong>ไทย:</strong> hallucination เกิดขึ้นเมื่อโมเดลสร้างข้อมูลที่ฟังดูน่าเชื่อถือแต่เป็นเท็จหรือไม่มีหลักฐาน เช่น แต่งรายละเอียดผลิตภัณฑ์ขึ้นมา</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[An error caused by invalid API credentials<br/><span lang="th">ไทย: ข้อผิดพลาดจาก API credentials ที่ไม่ถูกต้อง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Confidently generated information that is false or not grounded in real data<br/><span lang="th">ไทย: ข้อมูลที่สร้างขึ้นอย่างมั่นใจแต่เป็นเท็จหรือไม่มีพื้นฐานจากข้อมูลจริง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Output that exceeds the maximum token limit<br/><span lang="th">ไทย: ผลลัพธ์ที่เกินขีดจำกัด token สูงสุด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[A hidden system message in the conversation<br/><span lang="th">ไทย: system message ที่ซ่อนอยู่ในการสนทนา</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Iterative prompt development</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What is the main goal of iterative prompt development?</p><p lang="th"><strong>ไทย:</strong> เป้าหมายหลักของการพัฒนา prompt แบบวนซ้ำ (iterative prompt development) คืออะไร?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Iterative development means analyzing outputs, identifying problems (length, focus, format), and refining the prompt step by step.</p><p lang="th"><strong>ไทย:</strong> การพัฒนาแบบวนซ้ำหมายถึงการวิเคราะห์ผลลัพธ์ ระบุปัญหา (ความยาว โฟกัส รูปแบบ) และปรับปรุง prompt ทีละขั้นตอน</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Running the same prompt repeatedly until a lucky result appears<br/><span lang="th">ไทย: รัน prompt เดิมซ้ำๆ จนกว่าจะได้ผลลัพธ์ที่โชคดี</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Systematically refining a prompt by identifying and fixing issues in the generated output<br/><span lang="th">ไทย: ปรับปรุง prompt อย่างเป็นระบบโดยระบุและแก้ไขปัญหาในผลลัพธ์ที่สร้างขึ้น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Automatically generating prompts without human review<br/><span lang="th">ไทย: สร้าง prompt อัตโนมัติโดยไม่ต้องมีมนุษย์ตรวจสอบ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Replacing delimiters with longer source documents<br/><span lang="th">ไทย: แทนที่ตัวคั่นด้วยเอกสารต้นฉบับที่ยาวขึ้น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Length constraints</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>If an LLM's generated marketing copy is too long, which prompt change is most appropriate?</p><p lang="th"><strong>ไทย:</strong> หากข้อความการตลาดที่ LLM สร้างยาวเกินไป ควรปรับ prompt อย่างไรจึงเหมาะสมที่สุด?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Explicit length constraints (word, sentence, or character limits) directly address outputs that are too verbose.</p><p lang="th"><strong>ไทย:</strong> ข้อจำกัดความยาวที่ชัดเจน (จำกัดคำ ประโยค หรือตัวอักษร) แก้ปัญหาผลลัพธ์ที่ยาวเกินไปได้โดยตรง</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Remove all delimiters from the source material<br/><span lang="th">ไทย: ลบตัวคั่นทั้งหมดออกจากเนื้อหาต้นฉบับ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Add an explicit constraint on length, such as a maximum word count<br/><span lang="th">ไทย: เพิ่มข้อจำกัดความยาวที่ชัดเจน เช่น จำนวนคำสูงสุด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Switch to a different programming language<br/><span lang="th">ไทย: เปลี่ยนไปใช้ภาษาโปรแกรมอื่น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Ask the model to ignore the source material entirely<br/><span lang="th">ไทย: สั่งให้โมเดลไม่สนใจเนื้อหาต้นฉบับเลย</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Audience targeting</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>When generated text focuses on the wrong details for the intended readers, what should you adjust in the prompt?</p><p lang="th"><strong>ไทย:</strong> เมื่อข้อความที่สร้างเน้นรายละเอียดผิดสำหรับผู้อ่านเป้าหมาย ควรปรับอะไรใน prompt?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Specifying the audience, tone, and which aspects to emphasize (e.g., technical materials vs. consumer benefits) steers the model toward relevant content.</p><p lang="th"><strong>ไทย:</strong> การระบุกลุ่มเป้าหมาย น้ำเสียง และแง่มุมที่ต้องเน้น (เช่น วัสดุทางเทคนิคเทียบกับประโยชน์ต่อผู้บริโภค) ช่วยนำโมเดลไปสู่เนื้อหาที่เกี่ยวข้อง</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Only the delimiter characters used<br/><span lang="th">ไทย: เฉพาะอักขระตัวคั่นที่ใช้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Instructions about the target audience, tone, and which details to emphasize<br/><span lang="th">ไทย: คำสั่งเกี่ยวกับกลุ่มเป้าหมาย น้ำเสียง และรายละเอียดที่ต้องเน้น</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[The network connection to the API<br/><span lang="th">ไทย: การเชื่อมต่อเครือข่ายกับ API</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[The order in which API keys are loaded<br/><span lang="th">ไทย: ลำดับการโหลด API key</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Extract vs summarize</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>When you need only shipping-related information from a product review, which approach is often more effective than a general summary?</p><p lang="th"><strong>ไทย:</strong> เมื่อต้องการเฉพาะข้อมูลเกี่ยวกับการจัดส่งจากรีวิวสินค้า วิธีใดมักมีประสิทธิภาพกว่าการสรุปทั่วไป?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Extraction targets specific information, while summarization may still include unrelated topics from the source text.</p><p lang="th"><strong>ไทย:</strong> การดึงข้อมูล (extract) มุ่งเน้นข้อมูลเฉพาะ ในขณะที่การสรุปอาจยังรวมหัวข้อที่ไม่เกี่ยวข้องจากต้นฉบับ</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Ask for a shorter summary of the entire review<br/><span lang="th">ไทย: ขอสรุปรีวิวทั้งหมดให้สั้นลง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Ask the model to extract only the information relevant to shipping and delivery<br/><span lang="th">ไทย: ขอให้โมเดลดึงเฉพาะข้อมูลที่เกี่ยวกับการจัดส่งและการส่งมอบ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Remove all length constraints from the prompt<br/><span lang="th">ไทย: ลบข้อจำกัดความยาวทั้งหมดออกจาก prompt</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Use few-shot examples from an unrelated domain<br/><span lang="th">ไทย: ใช้ตัวอย่าง few-shot จากโดเมนที่ไม่เกี่ยวข้อง</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Multiple inference tasks JSON</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What advantage does requesting JSON output provide when performing multiple inference tasks on a single piece of text (e.g., sentiment, item purchased, and brand)?</p><p lang="th"><strong>ไทย:</strong> การขอผลลัพธ์ JSON มีข้อดีอย่างไรเมื่อทำงาน inference หลายอย่างบนข้อความเดียว (เช่น sentiment สินค้าที่ซื้อ และแบรนด์)?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>JSON lets you define named fields for each task, producing one structured response that is easy to parse programmatically.</p><p lang="th"><strong>ไทย:</strong> JSON ช่วยให้กำหนดฟิลด์ชื่อสำหรับแต่ละงาน สร้างคำตอบที่มีโครงสร้างเดียวที่ง่ายต่อการแยกวิเคราะห์ด้วยโปรแกรม</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[JSON prevents the model from performing more than one task<br/><span lang="th">ไทย: JSON ป้องกันไม่ให้โมเดลทำมากกว่าหนึ่งงาน</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[It organizes multiple results into named fields within a single parseable response<br/><span lang="th">ไทย: จัดระเบียบผลลัพธ์หลายอย่างเป็นฟิลด์ชื่อในคำตอบเดียวที่แยกวิเคราะห์ได้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[JSON is required by all LLM APIs for inference<br/><span lang="th">ไทย: JSON เป็นข้อกำหนดของ LLM API ทุกตัวสำหรับ inference</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It eliminates hallucinations entirely<br/><span lang="th">ไทย: ขจัด hallucination ได้ทั้งหมด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Topic detection alerts</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>After inferring topics from a news article, a common practical use is to:</p><p lang="th"><strong>ไทย:</strong> หลังจากอนุมานหัวข้อจากบทความข่าว การใช้งานจริงที่พบบ่อยคือ:</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Matching inferred topics against a predefined list enables automated alerts, routing, or filtering of content.</p><p lang="th"><strong>ไทย:</strong> การจับคู่หัวข้อที่อนุมานกับรายการที่กำหนดไว้ล่วงหน้า ช่วยให้แจ้งเตือน จัดเส้นทาง หรือกรองเนื้อหาได้อัตโนมัติ</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Automatically generate images from the article<br/><span lang="th">ไทย: สร้างภาพจากบทความโดยอัตโนมัติ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Check whether predefined topics appear in the text to trigger alerts or automated actions<br/><span lang="th">ไทย: ตรวจสอบว่าหัวข้อที่กำหนดไว้ปรากฏในข้อความหรือไม่ เพื่อกระตุ้นการแจ้งเตือนหรือการทำงานอัตโนมัติ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Translate the article into binary format<br/><span lang="th">ไทย: แปลบทความเป็นรูปแบบไบนารี</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Remove all named entities from the text<br/><span lang="th">ไทย: ลบ named entity ทั้งหมดออกจากข้อความ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Text transformation</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Which of the following is an example of using an LLM for text transformation?</p><p lang="th"><strong>ไทย:</strong> ข้อใดเป็นตัวอย่างของการใช้ LLM สำหรับการแปลงข้อความ (text transformation)?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Transformation tasks change text in form or style—translation, tone adjustment, format conversion, and proofreading are common examples.</p><p lang="th"><strong>ไทย:</strong> งานแปลงข้อความเปลี่ยนรูปแบบหรือสไตล์ของข้อความ—การแปลภาษา ปรับน้ำเสียง แปลงรูปแบบ และตรวจสอบไวยากรณ์เป็นตัวอย่างทั่วไป</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Detecting whether a review expresses anger<br/><span lang="th">ไทย: ตรวจจับว่ารีวิวแสดงความโกรธหรือไม่</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Converting data from one format (e.g., JSON) to another (e.g., an HTML table)<br/><span lang="th">ไทย: แปลงข้อมูลจากรูปแบบหนึ่ง (เช่น JSON) เป็นอีกรูปแบบ (เช่น ตาราง HTML)</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Iteratively refining a marketing prompt over several drafts<br/><span lang="th">ไทย: ปรับปรุง prompt การตลาดแบบวนซ้ำหลายรอบ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Inferring five topics from a news story<br/><span lang="th">ไทย: อนุมานห้าหัวข้อจากข่าว</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Sentiment in email expansion</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>When expanding a customer review into a professional email reply, why is including sentiment information in the prompt useful?</p><p lang="th"><strong>ไทย:</strong> เมื่อขยายรีวิวลูกค้าเป็นอีเมลตอบกลับอย่างมืออาชีพ ทำไมการใส่ข้อมูล sentiment ใน prompt จึงมีประโยชน์?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Sentiment helps the model choose an appropriate response strategy—thanking the customer for positive feedback or apologizing and offering support for negative feedback.</p><p lang="th"><strong>ไทย:</strong> sentiment ช่วยให้โมเดลเลือกกลยุทธ์ตอบกลับที่เหมาะสม—ขอบคุณลูกค้าสำหรับ feedback เชิงบวก หรือขอโทษและเสนอความช่วยเหลือสำหรับ feedback เชิงลบ</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Sentiment determines which API endpoint to call<br/><span lang="th">ไทย: sentiment กำหนดว่าจะเรียก API endpoint ใด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[It helps the model choose an appropriate tone, such as thanks versus apology<br/><span lang="th">ไทย: ช่วยให้โมเดลเลือกน้ำเสียงที่เหมาะสม เช่น ขอบคุณเทียบกับขอโทษ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Sentiment replaces the need to include the original review text<br/><span lang="th">ไทย: sentiment แทนที่ความจำเป็นในการใส่ข้อความรีวิวต้นฉบับ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Negative sentiment always requires the shortest possible email<br/><span lang="th">ไทย: sentiment เชิงลบต้องใช้อีเมลสั้นที่สุดเสมอ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Temperature parameter</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>What does the temperature parameter typically control in LLM text generation?</p><p lang="th"><strong>ไทย:</strong> พารามิเตอร์ temperature มักควบคุมอะไรในการสร้างข้อความของ LLM?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Temperature adjusts randomness in token selection—lower values tend toward more deterministic output; higher values allow more variation and creativity.</p><p lang="th"><strong>ไทย:</strong> temperature ปรับความสุ่มในการเลือก token—ค่าต่ำมักให้ผลลัพธ์ที่แน่นอนกว่า ค่าสูงอนุญาตให้มีความหลากหลายและความคิดสร้างสรรค์มากขึ้น</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[The physical speed of the API response<br/><span lang="th">ไทย: ความเร็วทางกายภาพของการตอบกลับ API</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[The randomness or creativity of the model's output<br/><span lang="th">ไทย: ความสุ่มหรือความคิดสร้างสรรค์ของผลลัพธ์จากโมเดล</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[The maximum length of the input prompt<br/><span lang="th">ไทย: ความยาวสูงสุดของ input prompt</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Whether delimiters are recognized in the input<br/><span lang="th">ไทย: ว่าโมเดลจดจำตัวคั่นใน input หรือไม่</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>System message role</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>In a chat-based LLM application, what is the primary role of a "system" message?</p><p lang="th"><strong>ไทย:</strong> ในแอปพลิเคชัน LLM แบบแชท บทบาทหลักของ "system" message คืออะไร?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>The system message sets persistent instructions that define the assistant's behavior, persona, and task constraints for the conversation.</p><p lang="th"><strong>ไทย:</strong> system message กำหนดคำสั่งถาวรที่กำหนดพฤติกรรม บุคลิก และข้อจำกัดงานของผู้ช่วยสำหรับการสนทนา</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It stores the user's personal account credentials<br/><span lang="th">ไทย: เก็บข้อมูลรับรองบัญชีส่วนตัวของผู้ใช้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[It sets instructions that define the assistant's behavior and persona<br/><span lang="th">ไทย: กำหนดคำสั่งที่กำหนดพฤติกรรมและบุคลิกของผู้ช่วย</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It replaces all user messages in the conversation<br/><span lang="th">ไทย: แทนที่ user message ทั้งหมดในการสนทนา</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[It is only sent after the conversation has ended<br/><span lang="th">ไทย: ส่งเฉพาะหลังการสนทนาสิ้นสุดแล้ว</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Conversation history context</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Why might a chatbot fail to remember information (such as a user's name) from an earlier exchange?</p><p lang="th"><strong>ไทย:</strong> ทำไม chatbot อาจจำข้อมูล (เช่น ชื่อผู้ใช้) จากการสนทนาก่อนหน้าไม่ได้?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>LLMs are stateless between API calls. The model only sees the messages you include in the current request's conversation history.</p><p lang="th"><strong>ไทย:</strong> LLM ไม่มีสถานะระหว่างการเรียก API โมเดลเห็นเฉพาะข้อความที่คุณใส่ในประวัติการสนทนาของคำขอปัจจุบัน</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[System messages cannot contain personal information<br/><span lang="th">ไทย: system message ไม่สามารถมีข้อมูลส่วนตัวได้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[The model only has access to the messages included in the current request's conversation history<br/><span lang="th">ไทย: โมเดลเข้าถึงได้เฉพาะข้อความที่รวมอยู่ในประวัติการสนทนาของคำขอปัจจุบัน</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Names are always filtered for privacy by default<br/><span lang="th">ไทย: ชื่อถูกกรองเพื่อความเป็นส่วนตัวโดยค่าเริ่มต้นเสมอ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Temperature must be set to zero to retain conversational context<br/><span lang="th">ไทย: ต้องตั้ง temperature เป็นศูนย์เพื่อเก็บบริบทการสนทนา</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Conditional prompt logic</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Which prompting tactic involves asking the model to check whether certain conditions are met before deciding how to format the output?</p><p lang="th"><strong>ไทย:</strong> กลยุทธ์ prompting ใดที่ให้โมเดลตรวจสอบว่าเงื่อนไขบางอย่างเป็นจริงก่อนตัดสินใจรูปแบบผลลัพธ์?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Conditional instructions (e.g., "if the text contains steps, format them; otherwise say none found") help the model handle varied inputs correctly.</p><p lang="th"><strong>ไทย:</strong> คำสั่งแบบมีเงื่อนไข (เช่น "ถ้าข้อความมีขั้นตอน ให้จัดรูปแบบ มิฉะนั้นแจ้งว่าไม่พบ") ช่วยให้โมเดลจัดการ input ที่หลากหลายได้ถูกต้อง</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Using the highest possible temperature setting<br/><span lang="th">ไทย: ใช้ค่า temperature สูงสุดที่เป็นไปได้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Including conditional logic in the prompt (e.g., format as steps if instructions are present, otherwise return a default message)<br/><span lang="th">ไทย: ใส่ตรรกะแบบมีเงื่อนไขใน prompt (เช่น จัดเป็นขั้นตอนถ้ามีคำแนะนำ มิฉะนั้นส่งข้อความค่าเริ่มต้น)</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Removing all structured output requirements<br/><span lang="th">ไทย: ลบข้อกำหนดผลลัพธ์แบบมีโครงสร้างทั้งหมด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Sending only a system message with no user content<br/><span lang="th">ไทย: ส่งเฉพาะ system message โดยไม่มีเนื้อหาจากผู้ใช้</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Proofreading with LLM</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>When using an LLM to proofread text, which instruction approach is most effective?</p><p lang="th"><strong>ไทย:</strong> เมื่อใช้ LLM ตรวจสอบไวยากรณ์ข้อความ วิธีสั่งใดมีประสิทธิภาพที่สุด?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Explicitly asking the model to proofread and correct the text—or state that no errors were found—produces clear, actionable results.</p><p lang="th"><strong>ไทย:</strong> การสั่งให้โมเดลตรวจสอบและแก้ไขข้อความอย่างชัดเจน—หรือแจ้งว่าไม่พบข้อผิดพลาด—ให้ผลลัพธ์ที่ชัดเจนและนำไปใช้ได้จริง</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Ask the model to add more informal slang to the text<br/><span lang="th">ไทย: สั่งให้โมเดลเพิ่มคำสแลงไม่เป็นทางการในข้อความ</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Ask the model to proofread and correct the text, or indicate if no errors are found<br/><span lang="th">ไทย: สั่งให้โมเดลตรวจสอบและแก้ไขข้อความ หรือแจ้งว่าไม่พบข้อผิดพลาด</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Omit the text to be checked from the prompt entirely<br/><span lang="th">ไทย: ไม่ใส่ข้อความที่ต้องตรวจใน prompt เลย</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Request translation into a programming language<br/><span lang="th">ไทย: ขอแปลเป็นภาษาโปรแกรม</span>]]></text>
+      <feedback format="html"><text></text></feedback>
+    </answer>
+  </question>
+
+</quiz>

@@ -1,0 +1,11 @@
+python-dotenv
+google-genai
+nest-asyncio
+ipykernel
+jupyter
+llama-index
+llama-index-llms-google-genai
+llama-index-embeddings-huggingface
+llama-index-readers-file
+sentence-transformers
+pypdf
