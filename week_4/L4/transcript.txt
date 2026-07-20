@@ -1,0 +1,582 @@
+0:02
+another advanced RAG technique, auto-merging. An issue with the naive approach
+0:08
+is that you're retrieving a bunch of fragmented context chunks to
+0:13
+put into the LLM context menu, and the fragmentation
+0:17
+is worse the smaller your chunk size. Here, we use an
+0:48
+and the fragmentation is worse the smaller your
+0:21
+auto-merging heuristic to merge smaller chunks into
+0:26
+a bigger parent chunk to help ensure more coherent context. Let's check
+0:31
+out how to set it up. In this section, we'll talk
+0:35
+about auto-merging retrieval. An issue with the standard
+0:40
+RAG pipeline is that you're retrieving a
+0:43
+bunch of fragmented context chunks put into the LLM context window,
+0:19
+chunk size. For instance, you might get back two or
+0:56
+more retrieved context chunks in roughly the same section, but there's
+1:02
+actually no guarantees on the ordering of these
+1:05
+chunks. This can potentially hamper the alum's ability to synthesize
+1:11
+over this retrieved context within its context window. So what
+1:16
+auto-merging retrieval does is the following. First, define
+1:20
+a hierarchy of smaller chunks linking to bigger parent
+1:25
+chunks, where each parent chunk can have some number of
+1:29
+children. Second, during retrieval, if the set
+1:33
+of smaller chunks linking to a parent chunk
+1:36
+exceeds some percentage threshold, then we merge smaller chunks into the bigger
+1:42
+parent chunk. So we retrieve the bigger parent
+1:46
+chunk instead to help ensure more coherent context. Now let's check
+1:51
+out how to set this up. This notebook will introduce
+1:56
+the various components needed to construct an auto-merging retriever with Llama
+2:02
+index. The various components will be
+2:05
+covered in detail. And similar to the previous
+2:09
+section, at the end, Adupam will show you
+2:12
+how to experiment with parameters and evaluation with TruEra. Similar to before,
+2:18
+we'll load in the OpenAI API
+2:20
+key, and we'll load this using a convenience
+2:24
+helper function in our utils file. As with the previous lessons, we'll also
+2:30
+use the how to build a career in
+2:33
+AI PDF. And as before, we also encourage you to try out
+2:37
+your own PDF files as well. We load in
+2:40
+41 document objects, and we'll merge them into a single large document,
+2:46
+which makes this more amenable for text blending with our advanced retrieval methods.
+2:52
+Now we're ready to set up our auto-merging retriever. This
+2:57
+will consist of a few different components,
+3:00
+and the first step is to define what we call a
+3:04
+hierarchical node parser. In order to use an
+3:08
+auto-version retriever, we need to parse our nodes
+3:12
+in a hierarchical fashion. This means that nodes are parsed in decreasing
+3:18
+sizes and contain relationships to their parent
+3:21
+node. Here we demonstrate how the node parser works with a
+3:26
+small example. We create a toy
+3:28
+parser with small chunk sizes to demonstrate. Note
+3:32
+that the chunk sizes we use are 20, 48, 5, 12,
+3:36
+and 128. You can change the chunk sizes to any sort of
+3:40
+decreasing order that you'd like. Here we do it by a factor of four.
+3:46
+Now let's get the set of nodes from the document.
+3:50
+What this does is this actually returns all nodes. This returns
+3:55
+all leaf nodes, intermediate nodes, as well as parent nodes. So
+4:00
+there's going to be a decent amount of overlap
+4:03
+of information and content between the leaf,
+4:07
+intermediate, and parent nodes. If we only want to retrieve the leaf nodes, we can
+4:13
+call a function within Llama index called "gat
+4:17
+leaf nodes," and we can take a look
+4:20
+at what that looks like. In this example, we
+4:23
+call gat leaf nodes on the original set of nodes. And we take
+4:28
+a look at the 31st node to look at
+4:31
+the text. We see that the text trunk is actually fairly
+4:35
+small. And this is an example of a leaf node, because a leaf node
+4:41
+is the smallest chunk size of 128 tokens. Here's how
+4:45
+you might go about strengthening your math background to figure out what's important
+4:51
+to know, etc. Now that we've shown what a
+4:55
+leaf node looks like, we can also explore
+4:58
+the relationships. We can print the parent of the above node
+5:03
+and observe that it's a larger chunk containing the text of
+5:26
+is an example of what the parent node of
+5:08
+the leaf node, but also more. More concretely, the parent
+5:12
+node contains 512 tokens, while having four leaf nodes
+5:16
+that contain 128 tokens. There's four leaf nodes because the chunk
+5:22
+sizes are divided by a factor of four each time. This
+5:08
+the 31st leaf node looks like. Now that we've
+5:33
+shown you what the node hierarchy looks like, we
+5:37
+can now construct our index. We'll use the OpenAI LLM
+5:41
+and specifically GPT 3.5 Turbo. We'll also define a service context object containing
+5:48
+the LLM embedding model and the hierarchical node parser. As with the
+5:53
+previous notebooks, we'll use the "bge small en embedding model." The
+5:59
+next step is to construct our index.
+10:10
+into parent nodes and also use our re-rank
+9:20
+more. The next step is to
+6:01
+The way the index works is
+6:04
+that we actually construct a vector index on specifically the leaf
+6:09
+nodes. All other intermediate and parent nodes are
+6:13
+stored in a doc store and are retrieved dynamically during retrieval.
+6:18
+But what we actually fetch during the initial top
+6:22
+K embedding lookup is specifically the
+6:25
+leaf nodes, and that's what we embed. You see
+6:29
+in this code that we define a storage context
+6:32
+object, which by default is initialized with an in-memory document store. And
+6:39
+we call "storage_context.docstore.addDocuments "to add all nodes to this in-memory doc
+6:45
+store. However, when we create our vector store index, called auto-merging index,
+6:52
+right here, we only pass in the leaf
+6:55
+nodes for vector indexing. This means that, specifically, the
+7:00
+leaf nodes are embedded using the embedding model
+7:04
+and also indexed. But we also pass in the storage context
+7:08
+as well as the service context. And so the vector index
+7:12
+does have knowledge of the underlying doc store that
+7:17
+contains all the nodes. And finally, we persist
+7:20
+this index. If you've already built this index
+7:24
+and you want to load it from storage, you can
+7:28
+just copy and paste this block of code, which
+7:31
+will rebuild the index if it doesn't exist or
+7:35
+load it from storage. The last step now that we've defined the
+7:40
+auto-merging index is to set up the retriever and run the query engine. The
+7:46
+auto-merging retriever is what controls the merging logic. If
+7:51
+a majority of children nodes are retrieved for a given parent,
+7:56
+they are swapped out for the parent instead. In order
+8:00
+for this merging to work well, we set
+8:03
+a large top-k for the leaf nodes. And remember, the leaf
+8:07
+nodes also have a smaller chunk size of
+8:10
+128. In order to reduce token usage, we
+8:14
+apply a re-ranker after the merging has taken
+8:17
+place. For example, we might retrieve the top 12, merge and have a
+8:22
+top 10, and then re-rank into a top 6. The top end
+8:26
+for the re-ranker may seem larger, but remember that the base chunk
+8:32
+size is only 128 tokens, and then the next parent above
+8:36
+that is 512 tokens. We import a class
+8:39
+called auto-merging retriever, and then we define a sentence transformer re-rank module. We combine
+8:47
+both the auto-merging retriever and the re-rank module into our
+8:52
+retriever query engine, which handles both retrieval and synthesis. Now that
+8:58
+we've set this whole thing up end-to-end, let's actually test
+9:03
+what is the importance of networking in AI
+9:06
+as an example question, we get back a
+9:09
+response. We see that it says networking
+9:12
+is important in AI because it allows individuals
+9:16
+to build a strong professional network and
+6:00
+put it all together. And we'll create two high-level functions, build auto-merging index,
+9:29
+as well as get auto-merging query engine. And this
+9:33
+basically captures all the steps that we just showed you in
+9:38
+the first function, build auto-merging index. We'll use the hierarchical node parser
+9:44
+to parse out the hierarchy of child
+9:47
+to parent nodes we'll define the service context and we'll create a vector store index
+9:54
+from the leaf nodes but also linking to the document store
+9:58
+of all the nodes the second function,
+10:01
+get auto-merging query engine, leverages our auto merging
+10:06
+retriever which is able to dynamically merge leaf nodes
+8:24
+module and then combine it with the overall retriever
+10:18
+query engine. So we build the index using the build auto-merging
+10:23
+index function using the original source document, the
+10:27
+LLM set to GPT 3.5 turbo, as well
+10:30
+as the merging index as a save directory. And
+10:34
+then for the query engine, we call get auto
+10:37
+merging query engine based on the index, as well
+10:41
+as we set a similarity top K of equal to six.
+10:45
+As a next step, Anupam will show you
+10:47
+how to evaluate the auto-merging retriever and also iterate
+10:52
+on parameters using TruEra. We encourage you to try out your own
+10:57
+questions as well and also iterate on the parameters of
+11:02
+auto-merging retrieval. For instance, what happens when you change the trunk
+11:08
+sizes or the top K or the top N for the re-ranker?
+11:12
+Play around with it and tell us what the results are.
+11:16
+That was awesome, Jerry. Now that you have set up the auto-merging
+11:21
+retriever, let's see how we can evaluate it with the RAG
+11:26
+triad and compare its performance to the basic
+11:29
+RAG with experiment tracking. Let's set up
+11:33
+this auto-merging new index. You'll notice that it's two
+11:37
+layers. The lowest layer chunk, the leaf nodes, will have a
+11:42
+chunk size of 512, and the next layer up in
+11:45
+the hierarchy is a chunk size of 2048, in the hierarchy is
+11:50
+a chunk size of 2048, meaning that each parent will have
+11:54
+four leaf nodes of 512 tokens each. The
+11:58
+other pieces of setting this up are exactly the
+12:01
+same as what Jerry has shown you earlier.
+12:05
+One reason you may want to experiment with the two-layer auto-merging
+12:10
+structure is that it's simpler. Less work
+12:13
+is needed to create the index, as well as in the
+12:17
+retrieval step, there is less work needed because all the third-layer
+12:23
+checks go away. If it performs comparably well, then
+12:27
+ideally we want to work with a simpler structure.
+12:31
+Now that we have created the index with this two-layer
+12:35
+auto-merging structure. Let's set up the auto-merging engine for this setup. I'm
+12:42
+keeping the top K at the same value
+12:44
+as before, which is 12. And the re-ranking step will also
+12:49
+have the same and equal six. This will let us do a
+12:53
+more direct head to head comparison between this application setup
+12:58
+and the three-layer auto-merging hierarchy app that Jerry had set up earlier.
+13:04
+Now let's set up the Tru Recorder with this
+13:08
+auto-merging engine and we will give this an app ID of
+13:12
+app 0. Let's now load some questions for evaluation
+13:16
+from the generated questions.txt file that we have set up earlier, now we can
+13:22
+define the running of these evaluation questions for each
+13:27
+question in eval, we are going to set things up
+13:31
+so that the Tru Recorder object, when invoked with
+13:35
+the run evals, will record the prompts, responses, and the evaluation results, leveraging the
+13:42
+query engine. Now that our evaluations have completed, let's take a
+13:47
+look at the leaderboard. We can see that app
+13:51
+0 metrics here. Context relevance seems low.
+13:54
+The other two metrics are better. This is with our two-level
+13:59
+hierarchy with 512 as the leaf node chunk size and the parent
+14:04
+being 2048 tokens, so four leaf nodes per parent node now
+14:08
+we can run the true dashboard and take a look at the
+14:13
+evaluation results at the record level at the
+14:16
+next layer of detail. Let's examine the app leaderboard. You can see
+14:22
+here that after processing 24 records, the context
+14:26
+relevance at an aggregate level is quite low, although
+14:30
+the app is doing better on answer relevance and
+14:34
+groundedness. I can select the app. Let's now look at
+14:38
+the individual records of app 0 and see how the evaluation
+14:43
+scores are for the various
+14:45
+records. You can scroll to the right here and look
+14:49
+at the scores for answer relevance, context relevance,
+14:53
+and groundedness. Let's pick one that has low context
+14:57
+relevance. So here's one. If you click on it, you'll
+15:01
+see the more detailed view down below.
+15:04
+The question is discuss the importance of
+15:08
+budgeting for resources and the successful execution of AI projects. On the right here
+15:15
+is the response. And if you scroll down
+15:18
+further, you can see a more
+15:20
+detailed view for context relevance. There were six pieces of retrieve
+15:26
+context. Each of them is scored to be particularly low in their evaluation
+15:31
+scores. It's between 0 and 0.2. And if you pick
+15:35
+any of them and click on it you can see that
+15:39
+the response is not particularly relevant to the question that
+15:44
+was asked. You can also scroll back up and explore some of the other records you can pick
+15:51
+ones, for example, where the scores are good,
+15:54
+like this one here, and explore how the application is doing
+15:59
+on various questions, and where its strengths are,
+16:03
+where its failure modes are, to build
+16:06
+some intuition around what's working and what's not. Let's now compare the
+16:12
+previous app to the auto-merging setup that
+16:15
+Jerry introduced earlier. We will have three layers now in
+16:20
+the hierarchy, starting with 128 tokens at the leaf node level 512, one
+16:26
+layer up, and 2048 at the highest layer, so
+16:29
+at each layer each parent has
+16:31
+four children. Now let's set up the query engine
+16:35
+for this app setup, the True Recorder, all identical steps
+16:40
+as the one for the previous app. And finally,
+16:43
+we are in a position to run the evaluations.
+16:47
+Now that we have app 1 set up, we can take a
+16:51
+quick look. And the total cost is also
+16:54
+about half. And that's because, recall, this has three layers in
+16:59
+the hierarchy and the chunk size is 128 tokens instead of the 512,
+17:04
+which is the smallest leaf node token size for app 0. So that results
+17:10
+in a cost reduction. Notice also that context relevance
+17:14
+has increased by about 20%. And part of
+17:17
+the reason that's happening is that And part of the reason
+17:22
+that's happening is that the merging is likely happening a lot better with
+17:28
+this new app setup. We can
+17:30
+also drill down and look at app one in greater
+17:33
+detail. Like before, we can look at individual records. Let's
+17:38
+pick the same one that we looked at
+17:41
+earlier, the tab 0. It's the question about the
+17:45
+importance of budgeting. And now you can see context relevance is doing better.
+17:51
+Groundedness is also considerably higher. And if we
+17:55
+pick a sample example response here, you'll see that, in fact,
+18:00
+it is talking very specifically about budgeting for resources. So there is
+18:06
+improvement in this particular instance and also at an aggregate
+18:11
+level. Let me now summarize some of the key
+18:15
+takeaways from Lesson 4. We walked you through an approach to evaluate and iterate
+18:21
+with the auto-retrieval advanced RAG technique. And in particular,
+18:26
+we showed you how to iterate with different hierarchical
+18:31
+structures, the number of levels, the
+18:34
+number of child nodes, and chunk sizes. And
+18:37
+for these different app versions, you could evaluate
+18:41
+them with the RAG triad and track experiments to
+18:45
+pick the best structure for your use case. One
+18:49
+thing to notice is that not only are
+18:52
+you getting the metrics associated with the RAG
+18:56
+triad as part of the evaluation, but the drill down
+19:00
+into the record level can help you gain
+19:03
+intuition about hyperparameters that work best with certain doc types. For
+19:09
+example, depending on the nature of the document, such
+19:13
+as employment contracts versus invoices, you might find that
+19:18
+different chunk sizes and hierarchical structures work best. Finally, one other
+19:24
+thing to note is that auto-merging
+19:27
+is complementary to sentence window retrieval. And one way to think about
+19:33
+that is, let's say you have four
+19:35
+child nodes of a parent. With auto-merging, you might
+19:39
+find that child number one and child
+19:42
+number four are very relevant to the query that was asked.
+19:47
+And these then get merged under the auto-merging paradigm. In contrast, sentence
+19:53
+windowing may not result in this kind of merging because they are not
+19:59
+in a contiguous section of the text. That brings
+20:03
+us to the end of Lesson 4. We
+20:05
+have observed that with advanced rag techniques such
+20:09
+as sentence windowing and auto-merging retrieval augmented with
+20:14
+the power of evaluation, experiment tracking, and iteration,
+20:19
+you can significantly improve your rag applications. Improve
+20:24
+your RAG applications. In addition, while the course has focused on these two techniques
+20:31
+and the associated RAG triad for evaluation, there are
+20:35
+a number of other evaluations that you can play
+20:39
+with in order to ensure that your LLM
+20:42
+applications are honest, harmless, and helpful. This
+20:46
+slide has a list of some of the ones that
+20:49
+are available out of the box in TrueLens.
+20:52
+We encourage you to go play with TrueLens, explore the
+20:57
+notebooks, and take your learning to the next level.

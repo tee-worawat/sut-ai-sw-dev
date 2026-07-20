@@ -1,0 +1,1026 @@
+0:05
+We'll walk you through some core concepts on how
+0:09
+to evaluate RAG systems. Specifically, we
+0:13
+will introduce the RAG triad, a triad of metrics for the three
+0:19
+main steps of a RAG's execution. Context relevance, groundedness, and
+0:25
+answer relevance. These are examples of an extensible framework of
+0:31
+feedback functions. Programmatic evaluations of LLM apps. We then
+0:37
+show you how to synthetically generate an evaluation
+0:42
+data set, given any unstructured corpus. Let's get started.
+0:48
+Now I'll use a notebook to walk you through the
+0:52
+RAG triad, answer relevance, context relevance, and groundedness
+0:58
+to understand how each can
+1:00
+be used with truelens to detect hallucinations. At this
+1:06
+point, you have already PIP
+1:08
+installed TruLens, eval and Llama Index. So I'll not show you that
+1:14
+step. The first step for you will be to set up an OpenAI
+1:19
+API key. The OpenAI key is used for the completion step of the
+1:25
+RAG and to implement the evaluations with TruLens. So
+1:30
+here's a code snippet that does
+1:33
+exactly that. And you're now all set up with the
+1:38
+OpenAI key. The next section, I will quickly recap the query engine construction with Llama
+1:46
+Index. Jerry has already walked you
+1:49
+through that in lesson one in
+1:52
+some detail. We will largely build on that lesson.
+1:57
+The first step now is to set up a true object. From
+2:01
+TruLens eval, we are going to import the true
+2:06
+class. Then we'll set up a true object and instance of this class. And then
+42:19
+and advanced RAG technique, and also show you how to
+37:53
+output, does not do so well to get
+41:35
+some of these other examples where the LLM, the final RAG
+39:50
+as I look through the evaluations, I
+39:25
+and in the notebook, now you can see
+18:23
+scale of 0 to 1, or a full score
+39:08
+it got a full score of one on a
+37:59
+see that the answer relevance was
+37:07
+context relevance, and groundedness that have
+36:55
+can see that the user input, the prompt, the response,
+33:29
+context relevance, groundedness, and answer relevance, and this is run for
+33:20
+you can see that for each input prompt or question,
+31:22
+record the prompts, responses, intermediate results, and the evaluation
+28:56
+be used to record
+28:51
+we can set up an object
+2:13
+this object will be used to reset the database. This database
+2:18
+will be used later on to record the prompts, responses, intermediate
+2:25
+results of the Llama Index app, as well as the
+2:29
+results of the various evaluations we will be setting up with TrueLens.
+2:35
+Now let's set up the Llama Index reader. So this
+2:40
+snippet of code reads this PDF document from a directory on
+2:45
+how to build a career in AI written
+2:49
+by Andrew Ang and then loads this data into this document object.
+2:55
+The next step is to merge all of this
+2:58
+content into a single large document rather than having one document per
+3:05
+page, which is the default setup. Next, we set up
+3:10
+the sentence index, leveraging some of the Llama Index utilities. So you
+3:16
+can see here that we are using OpenAI GPT 3.5 Turbo set at
+3:22
+a temperature of 0.1. As the LLM that will be used for completion of the
+3:28
+RAG. The embedding model is set to bge small, and version 1.5.
+3:34
+And all of this content is being indexed with the sentence index
+3:40
+object. Next, we set up the sentence window
+3:44
+engine. And this is the query
+3:47
+engine that will be used later on to do retrieval effectively
+3:52
+from this advanced RAG application. Now that we
+28:12
+and evaluations, answer relevance, context relevance, and
+21:28
+Llama Index RAG that
+3:57
+have set up the query engine for sentence-window-based RAG,
+4:02
+let's see it in action by actually asking a specific question.
+4:08
+How do you create your AI portfolio? This will
+4:12
+return a full object with the
+4:15
+final response from the LLM, the intermediate pieces of retrieved context,
+4:22
+as well as some additional metadata. Let's take a
+4:27
+look at what the final response
+4:29
+looks like. So here you can see the final response that came
+4:35
+out of this sentence window-based rag. It provides a pretty good
+4:41
+answer on the surface to this question of how do
+4:45
+you create your AI portfolio. Later on, we will see
+4:50
+how to evaluate answers of this form against
+4:54
+the RAG triad to build confidence and identify failure modes for RAGs
+5:34
+we have set up the sentence-window-based RAG
+5:01
+of this form. for rags of this form. Now that we have
+5:06
+an example of a response to this question that looks quite good on
+5:12
+the surface, we will see how to make use of feedback functions,
+5:18
+such as the rag triad, to evaluate this kind of response more
+5:23
+deeply, identify failure modes, as well as build confidence or
+5:29
+iterate to improve the LLM application. Now that
+4:55
+application, let's see how we can evaluate it
+5:42
+with the RAG triad. We'll do a little bit of housekeeping in the
+5:48
+beginning. First step is this, is of course snippet that lets us
+5:54
+launch a StreamLit dashboard from inside the notebook. You'll see
+6:00
+later that we'll make use of that dashboard to see the results of
+6:06
+the evaluation and to run experiments, to
+6:10
+look at different choices of apps, and to see which to look at
+6:16
+different choices of apps and to see which one
+6:20
+is doing better. Next up, we initialize OpenAI GPT 3.5 Turbo
+8:42
+example of a retrieved piece of context
+10:08
+from the RAG. And then each
+20:56
+answer relevance, context relevance, and groundedness. And all we
+15:49
+as the final output or response
+13:17
+beneficial in building a career? This is an
+9:04
+see that we are using an LLM from OpenAI
+6:25
+as the default provider for our evaluations. And
+6:30
+this provider will be used to implement the different feedback functions or evaluations, such
+6:38
+as context relevance, answer relevance, and groundedness. Now,
+7:34
+out of the RAG application. And the answer
+6:44
+let's go deeper into each of the evaluations of the
+6:49
+RAG triad, and we'll go
+6:45
+back and forth a bit between slides and
+6:55
+the notebook to give you the full context. First up, we'll discuss answer relevance.
+7:03
+Recall that answer relevance is checking whether the final response
+7:09
+is relevant to the query that was asked by the
+7:13
+user. To give you a concrete example
+7:17
+of what the output of answer
+7:19
+relevance might look like, here's an example. The user
+7:24
+asked the question, how can altruism be beneficial in building
+7:30
+a career? This was the response that came
+6:41
+relevance evaluation produces two pieces of output. One is
+7:43
+a score. On a scale of 0 to 1, the
+7:46
+answer was assessed to be highly relevant, so it
+7:51
+got a score of 0.9. The second
+7:54
+piece is the supporting evidence or the rationale or the chain
+7:59
+of thought reasoning behind why the evaluation produced
+8:05
+this score. So here you can see that supporting evidence found in the answer
+8:12
+itself, which indicates to the LLM evaluation that it
+8:17
+is a meaningful and relevant answer. I also
+8:21
+want to use this opportunity to introduce the
+8:25
+abstraction of a feedback function. Answer relevance is
+8:30
+a concrete example of a feedback function. More generally, a feedback
+8:36
+function provides a score on a scale of 0
+8:40
+to 1 after reviewing an LLM
+8:43
+app's inputs, outputs, and intermediate results. Let's now look
+8:49
+at the structure of feedback functions using
+8:53
+the answer relevance feedback function as a concrete example. The first component is a
+9:01
+provider. And in this case, we can
+6:24
+to implement these feedback functions. Note
+9:12
+that feedback functions don't have to be implemented necessarily using
+9:18
+LLMs. We can also use BERT models and other kinds of mechanisms to implement feedback functions
+9:27
+that I'll talk about in some more detail later
+9:31
+in the lesson. The second component is that
+9:35
+leveraging that provider, we will implement a feedback
+9:40
+function. In this case, that's the relevance feedback function.
+9:46
+We give it a name, a human-readable name that'll be shown
+9:51
+later in our evaluation dashboard. And for this
+18:14
+the retrieval step of the RAG, and then can
+20:37
+do the context relevance as well as the groundedness
+20:10
+just gets the set of retrieved pieces of context from
+19:40
+much like for context relevance, as well
+18:24
+scale of 0 to 1 to this piece of retrieved context.
+18:00
+question or the user prompt, how can altruism be
+15:43
+we are making use of the input or
+15:08
+how relevant or good that context
+14:06
+now look at the structure of the feedback function for
+9:56
+particular feedback function, we run it on the user input,
+10:01
+the user query, and it also takes as input the final output
+10:07
+or response from the app. So given
+10:10
+the user question and the final answer
+10:13
+from the RAG, this be by function will make use
+10:18
+of a LLM provider such as OpenAI GPT 3.5 to come
+10:22
+up with a score for how relevant the responses to
+10:27
+the question that was asked. And in addition,
+10:31
+it'll also provide supporting evidence or chain of thought reasoning
+10:37
+for the justification of that score. Let's now switch back to the notebook and
+10:45
+look at the code in some more detail. Now let's
+10:49
+see how to define the question-answer relevance
+10:53
+feedback function in code. From TruLens eval, we will
+10:58
+import the feedback class. Then we set up the different
+11:04
+pieces of the question answer relevance function that we were just
+13:25
+the evaluation with context relevance, each of these pieces
+11:10
+discussing. First up, we have the provider, that is
+11:14
+OpenAI, GPT 3.5. And we set up this particular
+11:19
+feedback function where the relevance score will also be augmented with the
+11:26
+chain of thought reasoning, much like
+11:29
+I showed in the slides. We give this
+11:33
+feedback function a human-understandable name. We call it answer relevance. This will be
+11:41
+show up later in the dashboard,
+11:44
+making it easy for users to understand what the feedback function is
+11:50
+setting up. Then we also will give the
+11:53
+feedback function access to the input, that is the
+11:58
+prompt, and the output, which is the prompt, and the output, which is
+12:05
+the final response coming out of the RAG application. With
+12:10
+this setup, later on in the notebook, we will
+12:14
+see how to apply this feedback function on
+12:18
+a set of records, get the evaluation scores for answer relevance
+12:24
+as well as the chain of thought reasons for why for that
+12:29
+particular answer that was the judged score to be appropriate
+12:35
+for as part of the evaluation The next
+12:39
+feedback function that we will go deep into is
+12:43
+context relevance. Recall that context relevance is checking how good the retrieval
+12:50
+process is. That is, given a query, we will look at each
+12:56
+piece of retrieved context from the vector database and
+13:01
+assess how relevant that piece of context is to the question that
+13:07
+was asked. Let's look at a simple example.
+13:11
+The question here or the prompt from the user is, how can altruism
+13:17
+be beneficial in building a career? These are
+13:21
+the two pieces of retrieved context. And after
+11:04
+of retrieved context gets a score between 0 and 1. You
+13:57
+of the relevant scores of each of these
+13:36
+can see here the left context got a relevant
+13:40
+score of 0.5. The right context got a relevant
+13:44
+score of 0.7, so it was assessed
+13:47
+to be more relevant to this particular query.
+13:52
+And then the mean context relevant score is the average
+13:30
+retrieved pieces of context. That gets also reported out. Let's
+9:55
+context relevance. Various pieces of this structure are
+14:16
+similar to the structure for answer relevance, which we reviewed a few
+14:23
+minutes ago. There is a provider, that's OpenAI, and the
+14:28
+feedback function makes use of that provider to implement the context-relevance feedback function. The
+14:38
+differences are in the inputs to this particular
+14:42
+feedback function. In addition to the user input or prompt,
+14:48
+we also share with this feedback function a pointer to the retrieve contexts, that
+14:55
+is, the intermediate results in the execution of
+15:00
+the RAG application. We get back a score
+15:03
+for each of the retrieved pieces of context, assessing
+13:05
+is with respect to the query that was
+15:15
+asked, and then we aggregate and average those scores
+15:20
+across all the retrieved pieces of context to get the final
+15:25
+score. Now you will notice that in the answer
+15:30
+relevance feedback function, we had only made use of
+15:34
+the original input, the prompt, and the final
+15:39
+response from the RAG. In this feedback function,
+14:47
+prompt from the user, as well as intermediate results, the set
+15:52
+of retrieve contexts, to assess the quality of the retrieval. Between these
+15:59
+two examples, the full power of feedback
+16:03
+functions is leveraged by making use of inputs, outputs, and intermediate
+16:10
+results of a RAG application to assess its quality. Now that we
+16:15
+have the context selection set up, we are in a
+16:20
+position to define the context relevance feedback function in code. You'll
+16:27
+see that it's pretty much the code segment
+16:31
+that I walked through on the slide. We are still using OpenAI
+16:36
+as the provider, GPT 3.5 as the evaluation LLM.
+16:41
+We are calling the question statement or context relevance feedback function. It gets
+16:48
+the input prompt, the set of retrieved pieces of context, it
+16:54
+runs the evaluation function on each of those
+16:58
+retrieved pieces of context separately, gets a score for
+17:03
+each of them, and then averages them to report a final
+17:09
+aggregate score. Now, one additional variant
+17:13
+that you can also use,
+17:15
+if you like, is in addition to reporting a context-relevant score for
+17:21
+each piece of retrieved context, you can also augment it with chain-of-thought
+17:28
+reasoning so that the evaluation LLM provides not only
+17:33
+a score, So that the evaluation LLM provides not only a
+17:39
+score, but also a justification or explanation for its assessment score.
+17:45
+And that can be done with QS relevance with chain of
+17:50
+thought reasoning method. And if I give you a concrete example
+17:56
+of this in action, you can see here's the
+13:05
+that takes out a chunk from Andrew's article
+18:16
+on this topic. You can see
+18:18
+the context relevance feedback function gives a score of 0.7 on a
+13:25
+And because we have also invoked the chain of
+18:33
+thought reasoning on the evaluation LLM, it provides
+18:38
+this justification for why the score is 0.7. Let
+18:43
+me now show you the code snippet to set
+18:46
+up the groundedness feedback function. We kick it off
+18:51
+in much the same way as the previous feedback functions, leveraging LLM provider for
+18:59
+evaluation, which is, if you recall, OpenAI GPT 3.5. Then we define
+19:05
+the groundedness feedback function. This definition is structurally
+19:12
+very similar to the definition for context relevance. The groundedness measure comes with chain of
+19:21
+thought reasons justifying the scores, much
+19:25
+like I discussed on the slides. We give it the name groundedness,
+19:31
+which is easy to understand. And it
+19:34
+gets access to the set of retrieved contexts in the RAG application,
+14:00
+sentence in the final response gets a grounded net
+19:54
+score, and those are aggregated, averaged, to produce the final grounded net score
+20:02
+for the full response. The context selection here is the same context selection
+20:09
+that was used for setting up
+20:12
+the context relevance feedback function. So if you recall, that
+17:14
+access each node within that list, recover the text of the
+20:32
+context from that node, and proceed to work with that to
+18:48
+evaluation. With that, we are now in a position
+20:46
+to start executing the evaluation of the RAG
+20:51
+application. We have set up all three feedback functions,
+15:33
+need is an evaluation set on which we can
+21:06
+run the application and the evaluations and see how they're doing and
+21:12
+if there are opportunities to iterate and improve them further. Let's now look
+21:19
+at the workflow to evaluate and
+21:22
+iterate to improve LLM applications. We will start with the basic
+3:57
+we introduced in the previous lesson and which we have
+21:35
+already evaluated with the TruLens RAG triad. We'll
+21:40
+focus a bit on the failure modes related to the
+21:44
+context size. Then we will iterate on that basic
+21:49
+rag with an advanced rag technique, the Llama Index
+21:54
+sentence window rag. Next, we will re-evaluate this new
+21:59
+advanced rag with the TruLens RAG triad, focusing on these kinds of
+22:05
+questions. Do we see improvements specifically in context relevance?
+22:11
+What about the other metrics? The reason we focus on context relevance
+22:18
+is that often failure modes arise because the context
+22:23
+is too small. Once you increase the context up
+22:27
+to a certain point, you might see improvements in context
+22:32
+relevance. In addition, when context relevance goes up, often we
+22:38
+find improvements in groundedness as well. Because the LLM in
+22:44
+the completion step has enough relevant context to produce
+22:49
+the summary. When it does not have enough relevant
+22:54
+context, it tends to leverage its own internal knowledge
+22:59
+from the pre-training data set to try to fill those gaps, which results in
+23:06
+a loss of groundedness. Finally, we
+23:09
+will experiment with different window sizes to figure out
+23:15
+what window size results in the best evaluation metrics. Recall
+23:21
+that if the window size is too small, there
+23:25
+may not be enough relevant context to get
+23:28
+a good score on context relevance and groundedness. If the window
+23:35
+size becomes too big, on the other hand, irrelevant
+23:39
+context can creep into the final response, resulting
+23:44
+in not such great scores in
+23:47
+groundedness or answer relevance. We walked through three examples of evaluations or
+23:54
+feedback functions. Context relevance, answer relevance, and groundedness. In our
+24:02
+notebook, all three were implemented with LLM evaluations.
+24:07
+I do want to point out that feedback
+24:11
+functions can be implemented in different ways. Often,
+24:16
+we see practitioners starting out with ground truth
+24:21
+evals, which can be expensive to collect, but nevertheless a
+24:26
+good starting point. We also see people leverage humans to do
+24:32
+evaluations. That's also helpful and meaningful,
+24:36
+but hard to scale in practice. Ground truth evals, just
+24:41
+to give you a concrete example, think of a summarization
+24:47
+use case where there's a large
+24:49
+passage and then the LLM produces a summary.
+25:19
+LLM produces an output or a RAG application produces
+24:54
+A human expert would then give that summary a score indicating
+24:59
+how good it is. This can be used for other
+25:03
+kinds of use cases as well, such as chatbot-like use cases
+25:09
+or even classification use cases. Human evals are similar
+25:14
+in some ways to ground truth evals in that as the
+24:53
+an output, the human users of that application are going to
+25:29
+provide a rating for that output, how good it is.
+25:33
+The difference with ground truth evals is that these human users may
+25:40
+not be as much of an expert in the topic as
+25:44
+the ones who produce the curated ground truth
+25:48
+evals. It's nevertheless a very meaningful evaluation. It'll
+25:54
+scale a bit better than the ground truth
+25:57
+evals, but our degree of confidence in it is lower. One
+26:02
+very interesting result from the research literature is that if
+26:08
+you ask a set of humans to rate
+26:11
+a question, there's about 80% agreement. And interestingly enough, when you use
+26:19
+LLMs for evaluation, the agreement between the LLM
+26:23
+evaluation and the human evaluation is also about
+26:28
+the 80 to 85% mark. So that suggests that
+26:32
+LLM evaluations are quite comparable to human evaluations for
+26:37
+the benchmark data sets to which they have been
+26:42
+applied. So feedback functions provide us a way to scale up evaluations
+26:48
+in a programmatic manner. In addition to the LLM evals
+26:53
+that you have seen, feedback functions also provide can
+26:58
+implement traditional NLP metrics such as rouge scores
+27:03
+and blue scores. They can be helpful in certain scenarios,
+27:09
+but one weakness that they have
+27:12
+is that they are quite syntactic.
+27:15
+They look for overlap between words in two pieces of text.
+27:20
+So for example, if you have one piece of text that's referring
+27:26
+to a river bank and the other to
+27:29
+a financial bank, syntactically they might be viewed
+27:34
+as similar, and these references might
+27:38
+end up being viewed as similar references by a traditional
+27:43
+NLP evaluation, whereas the surrounding context will get
+27:48
+used to provide a more meaningful evaluation when
+27:53
+you're using either large language models such as GPT-4 or medium-sized
+27:59
+language models such as BERT models, and to perform your evaluation.
+28:06
+While in the course we have given you three examples of feedback functions
+13:35
+groundedness, TruLens provides a much broader set of evaluations
+28:24
+to ensure that the apps that you're
+28:27
+building are honest, harmless, and helpful. These are all
+28:32
+available in the open source library,
+28:36
+and we encourage you to play with them as
+28:40
+you are working through the course and building your LLM
+28:45
+applications. Now that we have set up all the feedback functions,
+2:09
+to start recording, which will
+2:21
+the execution of the application on various records. So you'll see here
+29:04
+that we are importing this Tru Llama class,
+29:08
+creating an object, Tru Recorder of
+29:11
+this Tru Llama class. This is our integration of
+29:16
+TruLens with Llama Index. It takes in the
+29:20
+sentence-window-engine from Llama Index that we had created
+29:25
+earlier, sets the app ID, and makes use of the
+29:30
+three feedback functions of the RAG triad that we created earlier. This
+29:36
+Tru recorder object will be used in a little bit to
+29:41
+run the Llama Index application, as well as the evaluation of these feedback
+29:48
+functions, and to record it all in a local database.
+29:53
+Let us now load some evaluation questions. In this
+29:58
+setup, the evaluation questions are set up already in this
+30:03
+text file, and then we just execute this code snippet to load them
+30:09
+in. Let's take a quick look at these
+30:12
+questions that we will use for evaluation. You
+30:17
+can see what are the keys to building a career in AI, and
+30:22
+so on. And this file you can edit
+30:25
+yourself and add your own questions that you might want to get answers
+30:32
+from Andrew Ang. You can also append
+30:35
+directly to the eval questions list in this way. Now let's
+30:40
+take a look at the eval questions list, and you can see that
+30:46
+this question has been added at the end.
+30:50
+Go ahead and add your own questions. And now we have everything
+30:56
+set up to get to the most exciting step in this notebook with this
+31:02
+code snippet. We can execute the sentence window
+31:06
+engine on each question in the list of eval questions
+31:11
+that we just looked at. And then with
+31:15
+Tru recorder, we are going to run each record against the RAG triad. We will
+16:40
+results in the true database. And you can see here as the
+31:34
+execution of the steps are happening for each
+31:38
+record, there is a hash that's an identifier
+31:42
+for the record. As the record gets added, we
+31:46
+have an indicator here that that step has
+31:50
+executed effectively. In addition, the feedback results for answer
+31:56
+relevance is done, and so on for context relevance, and
+32:01
+so on. Now that we have the recording done, we can
+32:06
+see the logs in the notebook by
+32:09
+executing, by getting the records and feedback and
+32:13
+executing this code snippet. And I don't want
+32:18
+you to necessarily read through all of the information
+32:23
+here. The main point I want to make is that you can see the
+32:28
+depth of instrumentation and the application. A lot of information
+32:34
+gets logged to the tru recorder, and this
+32:38
+information are on prompts, responses, evaluation results, and so
+32:44
+fault. And can be quite valuable to identify failure mods in the
+32:50
+apps and to inform iteration and improvement of the apps. All
+32:56
+of this information is valuable, flexible JSON format, so they can be
+33:02
+exploded and consumed by downstream processes. Next up,
+33:07
+let's look at some more human-readable format, for prompts, responses, and the
+33:14
+feedback function evaluations. With these quotes stampedes,
+26:12
+we see the output and the respective scores for
+30:15
+each and every entry in this list of
+33:39
+questions and evaluations_questions.text. You can see here the last question is
+33:47
+"How can I be successful in the AI?" Was
+33:50
+the question that I manually embedded to
+33:54
+that list have the end. Sometimes in running the evaluations,
+34:00
+you might see a non that
+34:02
+likely happen because of API key failure. You just
+34:07
+want to rerun it to, and show that the execution successfully
+34:12
+completes. I just showed you a
+34:15
+record level view of the evaluations, the prompts, responses, and evaluations,
+36:11
+dashboard. You can see here the aggregate view of
+34:23
+let's now get an aggregate view in the
+34:26
+leaderboard, which aggregates across all of these individual records and
+34:33
+produces an average score across the 10 records in that database. So
+34:39
+you can see here in the leaderboard, the aggregate
+34:44
+view across all the 10 records. We had set
+34:48
+the app ID to app 1. The average context
+34:51
+relevance is 0.56. Similarly, their average scores for groundedness, answer
+34:58
+relevance, and latency across all the 10 records of
+35:03
+questions that were asked of the RAG application. It's
+35:08
+useful to get this aggregate view to see how well your app
+35:14
+is performing and at what level of latency and
+35:18
+cost. In addition to the notebook interface, TrueLens also
+35:23
+provides a local Streamlit app dashboard with which you can
+35:47
+So we can get the dashboard
+35:29
+examine the applications that you're building, look at
+35:34
+the evaluation results, drill down into record-level views to both get aggregate and detailed evaluation
+35:43
+views into the performance of your app.
+35:27
+going with the True.run Dashboard method, and this
+35:54
+sets up a local database at a certain URL.
+35:58
+Now once I click on this, this might
+36:02
+show up in some window, which is not within this frame.
+36:07
+Let's take a few minutes to walk through this
+34:17
+the app's performance. 11 records were processed
+36:20
+by the app and evaluated. The average latency is
+36:25
+3.55 seconds. We have the total cost, the
+36:28
+total number of tokens that were processed by
+36:33
+the LLMs. And then scores for the RAG triad. For
+36:37
+context relevance, it's 0.56. For groundedness, 0.86. And
+36:42
+answer relevant is 0.92. We can select the app here to get
+36:48
+a more detailed record-evel view of the evaluations. For each of the records, you
+23:43
+this metadata, the timestamp, and then scores for answer relevance,
+3:57
+been recorded, along with latency, total number of tokens, and total cost.
+37:18
+Let me pick a row in which the LLM indicates,
+37:22
+evaluation indicates that the LLM, the RAG application has done well. Let's pick
+37:29
+this row. Once we click on a row, we can scroll
+37:34
+down and get a more detailed view of the different components of
+37:40
+that row from the table. So the question here, the prompt
+37:45
+was, what is the first step to becoming good at AI? The
+37:50
+final response from the RAG was, is to
+37:48
+learn foundational technical skills. Down here, you can
+7:12
+viewed to be one on a scale
+38:45
+you can see the groundedness evaluations. So this was
+38:04
+of zero to 1. It's a relevant, quite a relevant answer to the
+38:10
+question that was asked. Up here, you can see that context
+38:15
+relevance, the average context relevance score is 0.8. For the two
+38:22
+pieces of context that were retrieved, Both of them individually got scores
+38:28
+of 0.8. We can see the chain of
+38:31
+thought reason for why the LLM evaluation
+38:35
+gave a score of 0.8 to this particular response from
+38:40
+the RAG in the retrieval step. And then down here,
+38:02
+one of the clauses in the final answer. It got a score
+38:55
+of one. And over here is the reason for that score. You
+39:00
+can see this was the statement sentence,
+39:04
+and the supporting evidence backs it up. And so
+17:03
+of 10 on a scale of zero to 10. So previously, the kind
+39:19
+of reasoning and information we were talking about through slides
+17:59
+that quite neatly in this StreamLit local app that runs on
+39:34
+your machine. You can also get a detailed
+39:38
+view of the timeline, as well as get access to the full
+39:43
+JSON object. Now let's look at an example where
+39:47
+the rag did not do so well. So
+32:17
+see this row with a low groundedness score of 0.5. So let's click on that. That
+40:01
+brings up this example. The question is how can altruism be beneficial in
+40:08
+building a career? There's a response.
+40:11
+If I scroll down to the groundedness evaluation,
+40:16
+then both of the sentences in the final response have low groundedness
+40:22
+score. Let's pick one of these and look at
+40:26
+why the groundedness score is low. So you can see
+40:31
+this, the overall response got broken down into four statements, and the
+40:37
+top two were good, but the bottom two did not have good supporting
+40:43
+evidence in the retrieved pieces of context. In particular, if you look
+40:50
+at this last one, the final output from the LLM says, additionally, practicing
+40:57
+altruism can contribute to personal fulfillment and a sense
+41:03
+of purpose, which can enhance motivation and overall well-being,
+41:09
+ultimately benefiting one's career success. While that might very well be
+41:15
+the case, there was no supporting evidence found
+41:20
+in the retrieved pieces of context to ground that statement.
+41:26
+And that's why our evaluation gives this a low score.
+41:30
+You can play around with the dashboard and explore
+35:40
+a feeling for the kinds of failure modes
+41:47
+that are quite common when you're using RAG applications.
+41:53
+And some of these will get addressed as
+41:56
+we go into the sessions on
+41:59
+more advanced RAG techniques, which can do better in
+42:04
+terms of addressing these failure modes. Lesson two
+42:08
+is a wrap with that. In the next lesson, we will
+42:13
+walk through the mechanism for sentence window-based retrieval
+35:20
+evaluate the advanced technique leveraging the RAG triad and
+42:29
+true lengths.

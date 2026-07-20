@@ -1,0 +1,441 @@
+how to set up both a basic and advanced RAG
+0:04
+pipeline with Llama Index. We'll load in an evaluation benchmark and use
+1:32
+a basic and advanced RAG pipeline with Llama Index.
+0:09
+TrueLens to define a set of metrics so that we can benchmark
+0:14
+advanced RAG techniques against a baseline, or basic
+0:17
+pipeline. In the next few lessons, we'll explore each
+0:21
+lesson a little bit more in depth. Let's first walk through
+0:25
+how a basic Retrieval Augmented Generation pipeline works,
+0:29
+or a RAG pipeline. It consists of three different components, ingestion,
+0:34
+retrieval, and synthesis. Going through
+0:37
+the ingestion phase, we first load in
+0:39
+a set of documents. For each document, we split it into a set of text
+0:44
+chunks using a text splitter. Then for each chunk, we generate an embedding
+0:49
+for that chunk using an embedding model. And then for each
+0:54
+chunk with embedding, we offload it to an index, which is a view
+0:58
+of a storage system such as a MacAndrew database. Once the data is
+1:03
+stored within an index, we then perform retrieval
+1:06
+against that index. First, we launch a user
+1:09
+query against the index, and then we fetch
+1:12
+the top K most similar chunks to the user query. Afterwards, we take these
+1:17
+relevant chunks, combine it with the
+1:20
+user query, and put it into the prompt window of
+1:23
+the LLM in the synthesis phase. And this allows us to generate a final
+1:28
+response. This notebook will walk you through how to set up
+0:06
+We will also use TruEra to help set up an
+1:39
+evaluation benchmark so that we can measure improvements against the baseline. For
+1:44
+this quick start, you will need an
+1:47
+OpenAI API key. Note that for this lesson, we'll use a set of
+1:51
+helper functions to get you set up and running quickly,
+1:55
+and we'll do a deep dive into some of these sections in the future lessons.
+2:00
+Next, we'll create a simple LLM application using
+2:03
+Llama Index, which internally uses an OpenAI LLM. In
+2:07
+terms of the data source, we'll use the How to Build a Career
+2:11
+in AI PDF written by Andrew Wright. Note that you
+2:15
+can also upload your own PDF file if you
+2:18
+wish. And for this lesson, we encourage you to
+2:21
+do so. Let's do some basic sanity checking of what the
+2:25
+document consists of as well as the length
+2:27
+of the document. We see that we have
+2:30
+a list of documents. There's 41 elements in there. Each item in
+2:34
+that list is a document object. And
+2:37
+we'll also show a snippet of the text for a given
+2:40
+document. Next, we'll merge these into a single document because it helps with
+2:46
+overall text blending accuracy when using more advanced retrieval methods
+2:51
+such as a sentence window retrieval
+2:53
+as well as auto-merging retrieval. The
+2:56
+next step here is to index these documents and we can do
+3:00
+this with the vector store index within Llama
+3:03
+Index. Next, we define a service context object
+3:06
+which contains both the LLM we're going
+3:09
+to use as well as the embedding model
+3:12
+we're going to use. The LLM we're going to use is GPT-3.5-Turbo from OpenAI, and
+3:17
+then the embedding model that we're going to use is the HuggingFace BGESmall model. These
+3:23
+few steps show this ingestion process right here. We've loaded
+3:28
+in documents, and then in one line, "VectorStoreIndexOfFromDocuments," we're
+3:33
+doing the chunking, embedding, and indexing under the hood
+3:37
+with the embedding model that you specified. Next, we obtain
+3:41
+a query engine from this index that
+3:44
+allows us to send user queries that do
+3:46
+retrieval and synthesis against this data. Let's try out our first
+14:01
+networking in AI? Networking is important in AI
+12:44
+get the query engine from the
+8:37
+both retrieval as well as synthesis
+3:51
+request. And the query is, what are steps to take when finding
+3:55
+projects to build your experience? Let's find out. Start small and gradually
+4:01
+increase the scope and complexity of your projects. Great, so it's working.
+4:06
+So now you've set up the basic RAG
+4:08
+pipeline. The next step is to set up
+4:07
+some evaluations against this pipeline to understand how well it performs, and
+4:16
+this will also provide the basis for defining our advanced retrieval methods of
+4:22
+a sentence window retriever as well
+4:24
+as an auto-merging retriever. In this section, we use TrueLens to initialize
+4:30
+feedback functions. We initialize a helper function, get feedbacks,
+4:34
+to return a list of feedback functions to
+4:37
+evaluate our app. Here, we've created a RAG
+4:40
+evaluation triad, which consists of pairwise comparisons between the
+4:45
+query, response, and context. And so this really creates three different evaluation
+4:51
+modules, answer relevance, context relevance, and groundedness. Answer relevance
+4:56
+is, is the response relevant to the query.
+4:59
+Context relevance is, is the retrieved context relevant to
+5:03
+the query. And groundedness is,
+5:05
+is the response supported
+5:07
+by the context. We'll walk through how to set this
+5:11
+up yourself in the next few notebooks.
+5:13
+The first thing we need to do
+5:15
+is to create set of questions on which does has her occupation.
+5:20
+Here, we've pre-written the first 10, and we encourage you to add to the
+5:37
+to create a set of questions on which to
+5:25
+list. And now we have some evaluation questions. What are the keys
+5:29
+to building a career in AI? How can teamwork contribute to
+5:33
+success in AI? Etc. The first thing we need to do is
+5:24
+test our application. Here, we've pre-written the first 10,
+5:44
+but we encourage you to also add to this list.
+5:47
+Here, we specify a fun new question, what is the
+5:51
+right AI job for me? And we add it to the eval questions
+5:55
+list. Now we can initialize the TrueLens modules to begin our
+5:59
+evaluation process. We've initialized the TrueLens module and now we've reset the database. We
+6:05
+can now initialize our evaluation modules. LLMs are growing as a standard mechanism
+6:11
+for evaluating generative AI applications at scale. Rather than
+6:15
+relying on expensive human evaluation or set benchmarks,
+6:19
+LLMs allows us to evaluate our applications in a way that
+6:23
+is custom to the domain in which we operate
+6:26
+and dynamic to the changing demands for our
+6:29
+application. Here we've pre-built a ShuLens recorder
+6:33
+to use for this example. In the recorder,
+6:36
+we've included the standard triad of evaluations for evaluating regs. Groundedness, context
+6:42
+relevance, and answer relevance. We'll also specify an
+6:46
+ID so that we can track this version of
+6:49
+our app. As we experiment, we can track new
+6:52
+versions by simply changing the app ID. Now we can
+6:55
+run the query engine again with the
+6:58
+TrueLens context. So what's happening here is that we're sending
+7:02
+each query to our query engine. And in
+7:05
+the background, the TrueLens recorder is evaluating each of our queries
+7:10
+against these three metrics. If you see some
+7:13
+warning messages, don't worry about it. Some of it is system dependent.
+7:18
+Here we can see a list of queries
+7:20
+as well as their associated responses. You
+7:23
+can see the input, output, the record ID, tags, and
+7:27
+more. You can also see the answer relevance, context relevance, and
+7:31
+groundedness for each rub. In this dashboard, you can see your evaluation metrics like
+7:37
+context relevance, answer relevance, and groundedness,
+7:41
+as well as average latency, total cost, and more in the UI.
+7:45
+Here, we see that the answer relevance and groundedness
+7:49
+are decently high, but CloudTax relevance is pretty low. Now let's see
+7:54
+if we can improve these metrics with
+7:57
+more advanced retrieval techniques like sentence window
+8:00
+retrieval as well as on emerging retrieval. The first advanced technique
+8:05
+we'll talk about is sentence window retrieval. This
+8:09
+works by embedding and retrieving single sentences, so more granular chunks. But after retrieval,
+8:16
+the sentences are replaced with a
+8:18
+larger window of sentences around the original retrieved sentence.
+8:23
+The intuition is that this allows for
+8:25
+the LLM to have more context for the information retrieved in
+8:30
+order to better answer queries while still retrieving
+8:33
+on more granular pieces of information. So ideally improving
+3:48
+performance. Now let's take a look at how to
+8:43
+set it up. First, we'll use opening IGBT 3.5
+12:22
+more of a deep dive on how it
+8:46
+Turbo. Next, we'll construct our sentence
+8:49
+window index over the given document.
+8:52
+Just a reminder that we have a helper
+8:54
+function for constructing the sentence window index over the
+8:58
+given document. and we'll do a deep dive in how this works under the hood in the
+9:04
+next few lessons. Similar to before, we'll get a query
+9:08
+engine from the sentence window index. And now that we've
+9:12
+set this up, we can try
+9:13
+running an example query. Here the question is, how
+9:17
+do I get started on a personal project in AI?
+9:20
+And we get back a response. Get started on a personal
+9:24
+project in AI is first important to identify scope the
+9:28
+project. Great. Similarly to before, let's try getting the TrueLens evaluation context and try benchmarking
+9:35
+the results. So here, we import the True recorder
+9:38
+sentence window, which is a pre-built True Lens recorder for the sentence
+9:44
+window index. And now we'll run the sentence
+9:47
+window retriever on top of these evaluation questions and
+9:51
+then compare performance on the RAG triad of
+9:54
+evaluation modules. Here we can see the responses
+9:57
+come in as they're being run. Some examples of
+10:00
+questions and responses. How can teamwork contribute to
+10:04
+success in AI? Teamwork can contribute to success in AI by
+10:08
+allowing individuals to leverage the expertise and insights of
+10:13
+their colleagues. What's the importance of networking in AI? Networking is
+10:17
+important in AI because it allows individuals to connect with
+10:20
+others who have experience and knowledge in the field.
+10:22
+Great. Now that we've run evaluations for two
+10:26
+techniques, the basic RAG pipeline, as well as the
+10:29
+sentence window retrieval pipeline, let's get a leaderboard of
+10:31
+the results and see what's going on. Here, we
+10:36
+see that general groundedness is 8 percentage points better
+10:41
+than the baseline RAG pipeline. Answer relevance is more
+10:45
+or less the same. Context relevance is also better for the sentence window
+10:49
+primary engine. Latency is more or less the
+10:52
+same, and the total cost is lower. Since the groundedness
+10:59
+and context relevance are higher, but the total cost is lower, we
+11:03
+can intuit that the sentence window retriever is actually
+11:06
+giving us more relevant context and more
+11:09
+efficiently as well. When we go back
+11:16
+into the UI, we can see that we
+11:18
+now have a comparison between the direct query engine and the baseline, as
+11:21
+well as the sentence window. And we can
+11:23
+see the metrics that we just saw in the notebook displayed in
+11:27
+UI as well. The next advanced
+11:30
+retrieval technique we'll talk about is the auto-merging
+11:32
+retriever. Here we construct a hierarchy of larger parent nodes with smaller child nodes that
+11:38
+reference the parent node. So for instance we might
+11:41
+have a parent node of chunk size 512 tokens, and underneath there are four
+11:47
+child nodes of chunk size 128 tokens that link to
+11:51
+this parent node. The auto-merging retriever
+11:55
+works by merging retrieved nodes into larger parent nodes, which means
+12:00
+that during retrieval, if a parent actually has a
+12:04
+majority of its children nodes retrieved, then we'll replace the
+12:07
+children nodes with the parent node. So this allows us
+12:11
+to hierarchically merge our retrieved nodes. The combination
+12:14
+of all the child nodes is the same text as
+12:17
+the parent node. Similarly to the sentence window
+12:19
+retriever, in the next few lessons, we'll do a bit
+8:43
+works. Here, we'll show you how to set it up
+12:26
+with our helper functions. Here, we've built the auto merging index,
+12:34
+again, using GPT 3.5 Turbo for the LLM, as
+12:38
+well as the BGE model for the embedding model. We
+3:52
+auto-merging retriever. And let's try running an example query. How do I
+12:53
+build a portfolio of AI projects? In the logs here, you actually see the merging
+12:57
+process go on. We're merging nodes into a
+13:00
+parent node to basically retrieve the parent node as opposed
+13:03
+to the child node. To build a portfolio of AI
+13:09
+projects, it is important to start with simple undertakings and gradually progress to
+13:12
+more complex ones. Great, so we see that it's working.
+13:16
+Now let's benchmark results with TrueLens. We get a pre-built TrueLens recorder on
+13:21
+top of our auto merging retriever. We then run
+13:32
+the auto merging retriever with TrueLens on top of
+13:35
+our evaluation questions. Here for each question, you actually see
+13:41
+the merging process going on, such as merging three nodes into the parent
+13:45
+node for the first question. If
+13:48
+we scroll down just a little bit, we see that for
+13:51
+some of these other questions, we're also
+13:52
+performing the merging process. Merging three nodes into a parent
+13:55
+node, merging one node into a parent node. An example
+13:58
+question response pair is, what is the importance of
+10:18
+because it helps in building a strong professional
+14:06
+networking community.

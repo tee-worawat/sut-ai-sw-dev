@@ -1,0 +1,780 @@
+0:02
+an advanced RAG technique, our sentence window retrieval method. In
+0:07
+this method, we retrieve based on smaller
+0:10
+sentences to better match the relevant context, and
+0:14
+then synthesize based on an expanded context window
+0:17
+around the sentence. Let's check out how to set it up. First, some context.
+0:23
+The standard RAG pipeline uses the same text chunk for both
+0:27
+embedding and synthesis. The issue is that embedding and synthesis. The
+0:33
+issue is that embedding-based retrieval typically
+0:37
+works well with smaller chunks, whereas the LLM
+0:40
+needs more context and bigger chunks to synthesize a good answer. What
+0:45
+sentence window retrieval does is decouple the two a bit. We
+0:50
+first embed smaller chunks or sentences and store them in
+0:54
+a vector database. We also add context of the sentences that
+0:59
+occur before and after to each chunk. During retrieval, we
+1:03
+retrieve the sentences that are most relevant to the question with
+1:08
+a similarity search and then replace
+1:11
+the sentence with a full surrounding context. This allows us
+1:15
+to expand the context that's actually fed to
+1:19
+the LLM in order to answer the question. This notebook will introduce
+1:24
+the various components needed to construct
+1:27
+a sentence window retriever with Llama
+1:30
+Index. The various components will be covered in detail.
+1:34
+At the end, Anupam will show you how to experiment with parameters and
+1:39
+evaluation with TruEra. This is the same
+1:42
+setup that you've used in the previous lessons, so make sure to install
+1:48
+the relevant packages, such as Llama Index and
+1:51
+Truelines eval. For this quick start, you'll need an open AI key
+1:56
+similar to previous lessons. This open AI key is used
+2:00
+for embeddings, LLMs, and also the evaluation piece. Now
+2:04
+we set up and inspect our documents to use for iteration
+2:08
+and experimentation. Similar to the first lesson, we
+2:12
+encourage you to upload your own PDF file as well.
+2:16
+As with before, we'll load in the How to Build
+2:20
+a Career in AI eBook. It's the same document as before. So we
+2:24
+see that it's a list of documents, there are 41 pages,
+2:28
+the object schemas are document object, and here is
+2:32
+some sample text from the first page. The next piece is,
+2:36
+we'll merge these into a single document because it helps
+2:41
+with overall text blending accuracy when using more advanced
+2:45
+retrievers. Now let's set up the
+2:48
+sentence window retrieval method, and we'll go through how to set
+2:52
+this up more in depth. We'll start with a window size
+2:56
+of 3 and a top K value of 6. First, we'll import what we
+3:01
+call a sentence window node parser. The sentence window node parser is an object that
+3:07
+will split a document into individual sentences and then augment each
+3:12
+sentence chunk with the surrounding context around that sentence.
+3:17
+Here we demonstrate how the node
+3:19
+parser works with a small example.
+3:22
+We see that our text, which
+3:24
+has three sentences, gets split into three nodes.
+3:28
+Each node contains a single sentence with the metadata
+3:32
+containing a larger window around the sentence. We'll
+3:36
+show what that metadata looks like for the second
+3:40
+node right here. You see that this metadata contains
+3:43
+the original sentence, but also the sentence that occurred
+3:48
+before and after it. We encourage you to
+3:51
+try out your own text too. For instance, let's try something
+3:55
+like this. For this sample text, let's take a look at the
+4:00
+surrounding metadata for the first node. Since the window size is
+4:05
+3, we have two additional adjacent nodes that
+4:08
+occur in front, and of course none behind it because
+4:12
+it's the first node. So we see that we have
+4:15
+the original sentence, or hello, but also foobar
+4:19
+and cat dog. The next step is actually build the index, and the
+4:23
+first thing we'll do is a setup in
+4:26
+LLM. In this case, we'll use OpenAI, specifically
+4:30
+GPT-355 Turbo, with a temperature of 0.1. The next step is to
+4:34
+set up a service context object, which, as a reminder, is
+4:39
+a wrapper object that contains all the context needed for indexing,
+4:44
+including the AL1, embedding model, and the node parser. Note
+4:48
+that the embedding model that we specify is
+4:51
+the "bge small model," and we actually download and
+4:54
+run it locally from HuggingFace. This is a compact,
+4:58
+fast, and accurate for its size embedding model. We can also
+5:03
+use other embedding model. For instance, a related model is "bge
+5:08
+large," which we have in the commented-out code
+5:11
+below. The next step is the setup of VectorStoreIndex with the source document.
+5:17
+Because we've defined the node parser as part
+5:20
+of the service context, what this will do is it will
+5:24
+take the source document, transform it
+5:27
+into a series of sentences augmented with surrounding contexts, and embed
+5:32
+it, and load it into the VectorStore. We can save the
+5:36
+index to disk so that you can load it
+5:39
+later without rebuilding it. If you've already built the index, saved
+5:44
+it, and you don't want to rebuild it, here is a handy
+5:48
+block of code that allows you to load the index from the
+5:52
+existing file if it exists, otherwise, it will build it.
+5:56
+The index is now built. The next step is to set up
+6:00
+and run the query engine. First, what we'll do
+6:03
+is we'll define what we call a metadata replacement post-processor.
+6:08
+This takes a value stored in the metadata and replaces a node text
+6:13
+with that value. And so this is done after retrieving
+6:17
+the nodes and before sending the nodes to the outline.
+6:21
+We'll first walk through how this works. Using
+6:24
+the nodes we created with the sentence window node parser, we can
+6:29
+test this post-processor. Note that we made a backup of
+6:33
+the original nodes. Let's take a look at the second node again. Great.
+6:38
+Now let's apply the post-processor on top of these nodes. If
+6:42
+we now take a look at the text of the second
+6:46
+node, we see that it's been replaced with a full context, including the sentences that occurred
+6:52
+before and after the current node. The next step is to add
+6:57
+the sentence transformer re-rank model. This takes the query and retrieve
+7:02
+nodes and re-order the nodes in order relevance using a
+7:06
+specialized model for the task. Generally, you will make the initial similarity top
+7:12
+K larger, and then the re-ranker will rescore the nodes and
+7:16
+return a smaller top N, so filter out a
+7:19
+smaller set. An example of a re-ranker is bge-re-ranker
+7:23
+based. This is a re-ranker based on the bge embeddings.
+7:27
+This string represents the model's name from HuggingFace, and
+7:32
+you can find more details on the model from HuggingFace. Let's take
+7:37
+a look at how this re-ranker works. We'll input some toy data and then see
+7:42
+how the re-ranker can actually re-rank the initial set of nodes
+7:47
+to a new set of nodes. Let's assume the original query is I
+7:51
+want a dog, and the initial set of score nodes is
+7:55
+this is a cat with a score of
+7:57
+0.6, and then this is a dog with a score
+8:00
+of 0.4. Intuitively, you would expect that the second node actually has a
+8:05
+higher score, so it matches the query more. And so
+8:09
+that's where the re-ranker can come in. Here, we see
+8:13
+the re-ranker properly surfaces the known about dogs and gave it a high
+8:18
+score of irrelevance. Now let's apply this to our actual query engine.
+8:23
+As mentioned earlier, we want a larger similarity
+8:27
+top K than the top N value we chose for the re-ranker. In
+8:31
+order to give the re-ranker a fair chance at
+8:34
+surfacing the proper information. We set the top K
+8:38
+equal to 6 and top N equals to
+8:40
+2, which means that we first fetch the six most similar
+8:44
+chunks using the sentence window retrieval, and then we filter
+8:49
+for the top two most relevant chunks using the sentence re-ranker. Now that we
+8:54
+have the full query engine set up, let's run
+8:58
+through a basic example. Let's ask a question over this dataset. What are the
+9:03
+keys to building a career in AI? And
+9:06
+we get back to response. We see that
+9:09
+the final response is that the keys to building a
+9:12
+career in AI are learning foundational technical skills, working on projects,
+9:18
+and finding a job. Now that we have the sentence window query engine
+9:23
+in place, let's put everything together. We'll put a lot of code
+9:27
+into this notebook cell, but note that this is essentially the
+9:32
+same as the function in the utils.BAAI file.
+9:35
+We have functions for building the sentence window index that we showed
+9:40
+earlier in this notebook. It consists of being
+9:44
+able to use the sentence window node parser to extract
+9:48
+out sentences from documents and augment it
+9:51
+with surrounding contexts. It contains setting up the sentence context
+9:56
+or using the service context object. It also
+9:59
+consists of setting up a vector sort index, using the source documents
+10:04
+and the service context containing the LLM embedding
+10:07
+model and node parser. The second part of this is
+10:10
+actually getting the sentence window query entered, which we
+10:14
+showed consists of getting the sentence
+10:12
+window retriever, using the metadata replacement post processor to
+10:21
+actually replace a node with the surrounding
+10:24
+context, and then finally using a re-ranking module to filter
+10:28
+for the top N results. We combine all of
+10:30
+this using the as query intro module. Let's first call build
+10:34
+sentence window index with the source document, them, as
+10:38
+well as the save directory. And then let's call the
+10:41
+second function to get the sentence
+10:43
+window query engine. Great. Now you're ready to experiment
+10:47
+with sentence window retrieval. In the next section, Audit Prompt
+10:51
+will show you how to actually run evaluations using the
+10:55
+sentence window retriever, so that you can evaluate the results
+10:59
+and actually play around the parameters and see
+11:02
+how that affects the performance of your engine. After running through these examples, we
+11:08
+encourage you to add your own questions and then
+11:11
+even define your own evaluation benchmarks just to play around
+11:15
+with this and get a sense of how everything works.
+11:18
+Thanks, Jerry. Now that you have set up the sentence window retriever,
+11:24
+let's see how we can evaluate it with the
+11:28
+RAG triad and compare its performance to the
+11:32
+basic rag with experiment tracking. Let us now see how
+11:37
+we can evaluate and iterate on the sentence
+11:41
+window size parameter to make the right trade-offs between
+11:46
+the evaluation metrics, or the quality of the app, and the
+11:52
+cost of running the application and evaluation. We
+11:56
+will gradually increase the sentence window size
+12:01
+starting with 1, evaluate the successive app versions
+12:06
+with TrueLens and the RAG triad, track experiments to pick the best
+12:12
+sentence window size, and as we go through this exercise, we will
+12:18
+want to note the trade-offs between token usage or cost. As we increase
+12:24
+the window size, the token usage and cost will go up, as in many
+12:30
+cases will context relevance. At the same time, increasing the window
+12:36
+size in the beginning, we expect will improve context relevance
+12:42
+and therefore will also indirectly improve
+12:46
+groundedness. One of the reasons for that
+12:50
+is when the retrieval step does not produce sufficiently
+12:55
+relevant context, the LLM in the completion step will
+13:00
+tend to fill in those gaps by leveraging
+13:03
+its pre-existing knowledge from the pre-training stage rather than explicitly
+13:10
+relying on the retrieved pieces of
+13:14
+context. And this choice can result in lower groundedness scores because recall
+13:21
+groundedness means components of the final
+13:25
+response should be traceable back to
+13:28
+the retrieved pieces of context. Consequently, what we expect is
+13:34
+that as you keep increasing your sentence window size,
+13:39
+context relevance will increase up
+13:42
+to a certain point, as will groundedness, and then
+13:47
+beyond that point, we will see context relevance
+13:51
+either flatten out or decrease, and
+13:54
+groundedness is likely going to follow a similar
+13:59
+pattern as well. In addition, there is also
+14:03
+a very interesting relationship between context relevance and
+14:08
+groundedness that you can see in
+14:11
+practice. When context relevance is low, groundedness tends to be low
+14:17
+as well. This is because the LLM will usually try to
+14:22
+fill in the gaps in the retrieved pieces of context by leveraging
+14:28
+its knowledge from the pre-training stage. This results
+14:33
+in a reduction in groundedness, even if the answers actually
+14:39
+happen to be quite relevant. As
+14:42
+context relevance increases, groundedness also tends to increase up
+14:48
+to a certain point. But if the context size becomes
+14:52
+too big, even if the context relevance is
+14:56
+high, there could be a drop in the groundedness because the
+15:02
+LLM can get overwhelmed with contexts that are
+15:06
+too large and fall back on its pre-existing knowledge base from the
+15:12
+training phase. Let us now experiment with the sentence
+15:17
+window size. I will walk you through a notebook
+15:21
+to load a few questions for evaluation and then gradually increase the
+15:28
+sentence window size and observe the
+15:31
+impact of that on the RAG triad evaluation metrics.
+15:36
+First, we load a set of pre-generated evaluation questions. And you can see here
+15:43
+some of these questions from this list. Next, we run the
+15:48
+evaluations for each question in that preloaded set of evaluation questions.
+15:55
+And then, with the true recorder object, we record the
+16:00
+prompts, the responses, the intermediate results of the application,
+16:06
+as well as the evaluation
+16:09
+results, in the true database. Let's now adjust the
+16:13
+sentence window size parameter and look at the impact of that
+16:19
+on the different RAG triad evaluation metrics. We will first reset the
+16:25
+true database. With this code snippet, we set the sentence window
+16:31
+size to 1. You'll notice that in this instruction. Everything else is
+17:17
+with the sentence window size set to 1.
+16:37
+the same as before. Then we set
+16:40
+the sentence window engine with the get sentence window query engine associated with
+16:48
+this index. And next up, we are ready to
+16:52
+set up the true recorder with the sentence window size set to 1. And
+16:58
+this sets up the definition of all the feedback functions for the
+17:04
+RAG triad, including answer relevance, context relevance, and groundedness.
+17:11
+And now we have everything set
+17:14
+up to run the evaluations for the setup
+16:32
+Okay, that ran beautifully. Now let's look at it in the
+17:26
+dashboard. You'll see that this instruction brings up a locally hosted StreamLit app,
+17:34
+and you can click on the link to
+17:37
+get to the StreamLit app. So the app leader board
+17:41
+shows us the aggregate metrics for all the 21 records that we ran
+17:47
+through and evaluated with TrueLens. The average latency here is 4.57 seconds.
+17:54
+The total cost is about two cents. Total number of tokens
+17:59
+processed is about 9,000. And you can see the
+18:03
+evaluation metrics. The application does reasonably well in answer
+18:09
+relevance and groundedness, but on context relevance, it's quite poor.
+18:16
+Let's now drill down and look at
+18:19
+the individual records that were processed by the application and evaluated. If
+18:26
+I scroll to the right, I can see some examples where the
+18:31
+application is not doing so well on these metrics.
+18:36
+So let me pick this row, and then
+18:39
+we can go deeper and examine how it's
+18:42
+doing. So the question here is, in the context of project
+18:47
+selection and execution, explain the difference between ready-fire and ready-fire-aim approaches. Provide
+18:57
+examples where each approach might be more beneficial.
+19:02
+You can see the overall response here in detail from the
+19:07
+RAG. And then, if you scroll
+19:10
+down, we can see the overall scores for groundedness, context relevance,
+19:16
+and answer relevance. Two pieces of context were retrieved in this example. And for
+19:24
+1 of the pieces of retrieved
+19:26
+context, context relevance is quite low. Let's
+19:31
+drill down into that example and take a closer
+19:35
+look. What you'll see here with this example is that the
+19:40
+piece of context is quite small. Remember that we are using
+19:46
+a sentence window of size 1, which means we have only added
+19:51
+1 sentence extra in the beginning and 1 sentence extra
+19:56
+at the end around the retrieve piece of context. And
+20:01
+that produces a fairly small piece of context
+20:05
+that is missing out on important information that
+20:09
+would make it relevant to the question that was asked. Similarly,
+20:15
+if you look at groundedness, we will see that
+20:19
+both of these pieces have retrieved the sentences. In
+20:24
+the final summary, the groundedness scores are quite low.
+20:29
+Let's pick the one with the higher groundedness
+27:15
+cost if you were to increase
+25:28
+of retrieved context is similar to the one
+20:34
+score, which has a bit more justification. And
+20:38
+if we look at this example, what we will see is
+20:42
+there are a few sentences here in the beginning for which
+20:48
+there is good supporting evidence in the retrieved piece of context. And so the score here
+20:56
+is high. It's a score of 10 on a
+20:59
+scale of 0 to 10. But then for these
+21:02
+sentences down here, there wasn't supporting evidence, and therefore the groundedness score is 0. Let's take a concrete example. Maybe
+21:14
+this one. It's saying it's often used in situations where the cost
+21:20
+of execution is relatively low and where the
+21:24
+ability to iterate and adapt quickly is more important than upfront planning.
+21:31
+This does feel like a plausible piece of text that could be
+21:37
+useful as part of the response to the question. However, it wasn't
+21:43
+there in the retrieved piece of context, so
+21:47
+it's not backed up by any supporting evidence
+21:51
+in the retrieved context. This could possibly have been
+21:56
+part of what the model had learned during its training phase, where either
+22:03
+from the same document, Andrew's document here on
+22:07
+career advice for AI, or some other source
+25:03
+app and look at this example in some
+22:11
+talking about the same topic, the model may
+22:15
+have learned similar information. But it's not grounded in that
+22:21
+it is not, the sentence is not supported by
+22:25
+the retrieved piece of context in this particular instance.
+22:30
+So this is a general issue when the sentence
+22:34
+window is too small, that context relevance tends to be low. And as a
+22:41
+consequence, groundedness also becomes low because the LLM starts
+22:46
+making use of its pre-existing knowledge from its training phase to start answering
+22:54
+questions instead of just relying on the supplied context. Now that
+23:00
+I've shown you a failure mode with sentence
+23:04
+windows set to one, I want to walk
+23:07
+through a few more steps to
+23:10
+see how the metrics improve as
+23:13
+we change the sentence window size. For the purpose of
+23:18
+going through the notebook quickly, I'm going to reload the evaluation questions,
+23:25
+but in this instance, just set it to the one question where
+23:30
+the model had problem, this particular question, which we just
+23:36
+walked through with the sentence window size set at 1. And then
+23:42
+I want to run this through with the sentence
+23:46
+window size set to 3. This code snippet
+23:49
+is going to set up the rag
+23:52
+with sentence window size set up three, and also
+23:56
+set up the true recorder for it. We now have
+24:00
+the definition of the feedback function set up in addition
+24:06
+to the RAG, with the sentence window set
+24:09
+at size 3. Next up, we are going to
+24:13
+run the evaluations with that eval for that particular
+24:18
+evaluation question that we have looked through in
+24:22
+some detail with the sentence window set through one, where we observe
+24:29
+the failure mode that has run successfully. Let's now look at the results with
+24:36
+sentence window engine set to three in the TruLens
+24:40
+dashboard. You can see the results here, I ran
+24:45
+it on the one record. That was the problematic record when
+24:50
+we looked at sentence window size one. And
+24:54
+you can see a huge increase in the context
+24:58
+relevance. It went up from 0.57 to 0.9. Now if I select the
+22:10
+more detail, let's now look at the same question that
+25:11
+we looked at with sentence window set at one. Now we
+25:11
+are at 3. Here's the full final response. Now if you look at the
+25:22
+retrieved pieces of context, you'll notice that this particular piece
+20:31
+that we had retrieved earlier with sentence window set at size
+25:38
+1. But now it has the expansion because of the
+25:42
+bigger sentence window size. For this section, we'll see
+25:47
+that this context got a context-relevant score of 0.9,
+25:52
+which is higher than the score of 0.8 that the smaller context
+25:58
+had gotten earlier. And this example shows that with an
+26:03
+expansion in the sentence window size, even reasonably good
+26:08
+pieces of retrieved context can get even better. Once the completion step is
+26:15
+done with these significantly better pieces of context, the groundedness score goes
+26:23
+up quite a bit. We'd see that by
+26:26
+finding supporting evidence across these two pieces of highly
+26:31
+relevant context, the groundedness score actually goes up all
+26:37
+the way to one. So increasing the sentence
+26:41
+window size from one to three led
+26:44
+to a substantial improvement in the evaluation metrics of the RAG triad.
+26:50
+Both groundedness and context relevance went up significantly, as
+26:56
+did answer relevance. And now we can look
+27:00
+at sentence window set to five. If you look
+27:04
+at the metrics here, a couple of things to
+27:08
+observe. One is the total tokens has gone up,
+27:12
+and this could have an impact on the
+24:56
+the number of records. So that's one of the trade-offs that
+27:23
+I mentioned earlier. As you increase the sentence window size, it gets more
+27:30
+expensive because more tokens are being processed by the LLMs during evaluation.
+27:37
+The other thing to observe is that while context relevance, and answer relevance have
+27:45
+remained flat, groundedness has actually dropped with the increase in the sentence
+27:53
+window size. And this can happen after a certain point
+27:58
+because, as the context size increases, the LLM can
+28:02
+get overwhelmed in the completion step with too
+28:06
+much information. And in the process of summarization,
+28:11
+it can start introducing its own
+28:14
+pre-existing knowledge instead of just the information in the
+28:20
+retrieved pieces of context. So to wrap things up
+28:24
+here, it turns out that as we gradually increase
+28:29
+the sentence window size from 1 to 3 to
+28:33
+5, 3, the size of 3 is the best choice for us for
+28:37
+this particular evaluation. And we see the increase in
+28:42
+context relevance and answer relevance and groundedness as we go
+28:48
+from one to 3, and then a reduction
+28:51
+or degradation in the groundedness step with a further increase to a size of five.
+28:59
+As you are playing with the notebook, we encourage you
+29:04
+to rerun it with more records in these
+29:07
+two steps. Examine the individual records which are causing problems for specific
+29:15
+metrics like context relevance or groundedness, and get some intuition and build
+29:22
+some intuition around why the failure modes are happening and what to do to
+29:29
+address them, and in the next section, we
+29:32
+will look at another advanced rack technique auto
+29:37
+merging to address some of those
+29:40
+failure modes. Irrelevant context can creep into
+29:44
+the final response, resulting in not such great scores
+29:49
+in groundedness or answer relevance.
